@@ -9,13 +9,16 @@ package tspsolver;
  *
  * @author Dorota
  */
+
 public class Main {
 
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Graf g=new Graf();
+        System.out.println(g.toString());
     }
 
 }
