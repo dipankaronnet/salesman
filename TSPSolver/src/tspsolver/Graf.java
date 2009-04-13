@@ -9,6 +9,7 @@ package tspsolver;
  *
  * @author Dorota
  */
+import java.lang.Object;
 import edu.uci.ics.jung.graph.AbstractGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -20,6 +21,27 @@ import edu.uci.ics.jung.graph.util.EdgeType;
   - u nas że Graf ma wierzchołki Integer i krawędzie String*/
 public class Graf<Integer,String> extends AbstractGraph<Integer,String>
 {
+    Integer a;
+    boolean isSource(Integer v, String e)
+    {
+        return false;
+    }
+    boolean isDest(Integer v, String e)
+    {
+        return false;
+    }
+    Integer getDest(String e)
+    {
+      return null;
+    }
+    public Integer getSource(String e)
+    {
+        return null;
+    }
+    public Integer getSuccessors(Integer v)
+    {
+        return null;
+    }
   Pair<Integer> getEndpoints(String edge)
    {
         Pair<Integer> para = new Pair<Integer>(4,5);
