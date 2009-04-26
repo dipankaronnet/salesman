@@ -1,5 +1,6 @@
 package Algorithm;
 import java.util.*;
+import java.lang.*;
 
 
 // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -11,12 +12,13 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.C98302E3-1152-F130-A844-F3457B1473A9]
     // </editor-fold> 
-    private int[][] distances;
+    private Integer[][] distances;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.F91F661B-AEC4-C8C7-027A-C4ED2B889438]
     // </editor-fold> 
     private int size;
+    private int arraySize;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.C3C6D90E-B87F-7E39-7894-2F867EA58A96]
@@ -29,7 +31,7 @@ public class Costs {
     /**
      * dla każdej macierzy kosztów wyznaczamy ścieżkę krawędzi które ona zawiera
      */
-    private List<Edge> path;
+    private ArrayList<Edge> path;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.5275A5C1-0E3C-ED28-030E-DC9E857A5296]
@@ -50,8 +52,15 @@ public class Costs {
     // #[regen=yes,id=DCE.E6C135C1-B775-4307-DEDF-6D4DDD33738D]
     // </editor-fold> 
     public Costs (int n) {
+        path=new ArrayList<Edge>();
         size=n;
-        for(int i=0; i<n; ++i)
+        arraySize=n;
+        distances=new Integer[arraySize][];
+        for(int i=0; i<arraySize; ++i)
+        {
+            distances[i]=new Integer[arraySize];
+        }
+        for(int i=0; i<arraySize; ++i)
             for(int j=0; j<n; ++j)
             distances[i][j]=INF;
     }
@@ -69,6 +78,10 @@ public class Costs {
          * i zapobiegamy pętli ustawiając (t,f) = INF
          */
     public Costs (int n, Costs parent, Edge e, boolean take) {
+        path=new ArrayList<Edge>();
+        path=parent.getPath();
+        size=n;
+        arraySize=parent.getSize();
         distances=parent.getDistances();
         int f=e.getFrom();
         int t=e.getTo();
@@ -78,12 +91,23 @@ public class Costs {
                path.add(e);
            else
            {
-               Iterator<Edge> it=path.iterator();
-               while(it.hasNext() && it.next().getTo()!=f)
+               int index=0;
+               boolean done=false;
+               for(Iterator<Edge> it= path.iterator(); it.hasNext();)
                {
+                    Edge a=it.next();
+                    if(a.getTo()==f || a.getFrom()==t)
+                    {
+                        path.add(index,e);
+                        done=true;
+                        break;
+                    }
+                    ++index;
                }
+               if(done==false)
+                   path.add(e);
            }
-            for(int i=0; i<size; ++i)
+            for(int i=0; i<arraySize; ++i)
             {
                 distances[f][i]=-1;
                 distances[i][t]=-1;
@@ -115,15 +139,23 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.A86B808A-99D3-C47E-09E5-AA6130EFD29A]
     // </editor-fold> 
-    public int[][] getDistances () {
+    public Integer[][] getDistances () {
         return distances;
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.ACCA8629-200C-821C-7C1F-C9C09A44971A]
     // </editor-fold> 
-    public void setDistances (int[][] val) {
-        this.distances = val;
+    public void setDistances () {
+        //TODO metoda ma pobierać dane wpisane przez uzytkownika
+        // z gui przechwycic wartości i wstawić
+        // tymczasowo wartosci wpisywane na sztywno
+        distances[0][1]=3; distances[0][2]=93; distances[0][3]=13; distances[0][4]=33;distances[0][5]=9;
+        distances[1][0]=4; distances[1][2]=77; distances[1][3]=42; distances[1][4]=21;distances[1][5]=16;
+        distances[2][0]=45; distances[2][1]=17; distances[2][3]=36; distances[2][4]=16;distances[2][5]=28;
+        distances[3][0]=39; distances[3][1]=90; distances[3][2]=80; distances[3][4]=56;distances[3][5]=7;
+        distances[4][0]=28; distances[4][1]=46; distances[4][2]=88; distances[4][3]=33;distances[4][5]=25;
+        distances[5][0]=3; distances[5][1]=88; distances[5][2]=18; distances[5][3]=46;distances[5][4]=92;
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -136,22 +168,46 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.D74975C4-6175-82C6-AEC5-8021D778CB01]
     // </editor-fold> 
-    public void setLowerBound (int val) {
-        this.lowerBound = val;
+    public void setLowerBoundAndReduce () {
+        int lb=0;
+        for(int i=0; i<arraySize; ++i)
+        {
+            int minPoziom=INF;
+            for(int j=0; j<arraySize; ++j)
+            {
+                if(distances[i][j]!=-1 && distances[i][j]<minPoziom)
+                    minPoziom=distances[i][j];
+            }
+            for(int j=0; j<arraySize; ++j)
+            {
+                if(distances[i][j]!=INF)
+                    distances[i][j]-=minPoziom;
+            }
+            lb+=minPoziom;
+        }
+        for(int i=0; i<arraySize; ++i)
+        {
+            int minPion=INF;
+            for(int j=0; j<arraySize; ++j)
+            {
+                if(distances[j][i]!=-1 && distances[j][i]<minPion)
+                    minPion=distances[j][i];
+            }
+            for(int j=0; j<arraySize; ++j)
+            {
+                if(distances[j][i]!=INF)
+                distances[j][i]-=minPion;
+            }
+            lb+=minPion;
+        }
+        lowerBound=lb;
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.1265C963-939B-377D-3732-05384D0E7A5E]
     // </editor-fold> 
-    public List<Edge> getPath () {
+    public ArrayList<Edge> getPath () {
         return path;
-    }
-
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,regenBody=yes,id=DCE.1FE038AE-000B-EAEB-05BC-61770D1357CF]
-    // </editor-fold> 
-    public void setPath (List<Edge> val) {
-        this.path = val;
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -161,25 +217,7 @@ public class Costs {
         return size;
     }
 
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,regenBody=yes,id=DCE.47C338F2-4500-2BD7-1094-AE05BB94ADEF]
-    // </editor-fold> 
-    public void setSize (int val) {
-        this.size = val;
-    }
-
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.377FC451-928A-C9F3-9772-9D578A1A3670]
-    // </editor-fold> 
-    public void reduce () {
-    }
-
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.610A3A58-17BA-5C41-68F1-D094EDAE60C2]
-    // </editor-fold> 
-    public void Unnamed () {
-    }
-
+    
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.45480FBC-5F06-C21A-2CF3-9E0EB3BDD036]
     // </editor-fold> 
@@ -190,14 +228,38 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.46E659CB-98C7-9557-1B64-452BB8831131]
     // </editor-fold> 
-    public void setEdgeToBranch (Edge val) {
-        this.edgeToBranch = val;
-    }
-
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.558C938C-B404-1557-1E2B-4DA2E4DC1DEE]
-    // </editor-fold> 
-    public void setCosts () {
+    public void setEdgeToBranch () {
+       int maxGrowth=0;
+       for(int i=0; i<arraySize; ++i)
+       {
+           for(int j=0; j<arraySize; ++j)
+           {
+               if(distances[i][j]==0)
+               {
+                   int growth=0, min=INF;
+                    for(int k=0; k<arraySize; ++k)
+                    {
+                        if(k!=j && distances[i][k]<min)
+                            min=distances[i][k];
+                    }
+                   growth+=min;
+                   min=INF;
+                   for(int k=0; k<arraySize; ++k)
+                   {
+                       if(k!=i && distances[k][j]<min)
+                           min=distances[k][j];
+                   }
+                   growth+=min;
+                   if(growth>maxGrowth)
+                   {
+                       maxGrowth=growth;
+                       Edge a=new Edge(i,j);
+                       edgeToBranch=a;
+                   }
+               }
+           }
+       }
+       System.out.println(edgeToBranch.getFrom() +" - " +edgeToBranch.getTo());
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -205,12 +267,14 @@ public class Costs {
     // </editor-fold> 
     public void addToTree () {
     }
-
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.ADA5F4C2-426B-5696-E7FB-4AF32EFB1345]
-    // </editor-fold> 
-    public void addTownToPath () {
+    public void showDistances()
+    {
+        for(int i=0; i<arraySize; ++i)
+        {
+            for(int j=0; j<arraySize; ++j)
+                System.out.print(distances[i][j]+" ");
+            System.out.println();
+        }
+        System.out.println();
     }
-
 }
-
