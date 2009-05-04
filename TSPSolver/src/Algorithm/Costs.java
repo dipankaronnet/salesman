@@ -79,22 +79,41 @@ public class Costs {
          */
     public Costs (int n, Costs parent, Edge e, boolean take) {
         path=new ArrayList<Edge>();
-        path=parent.getPath();
+        ArrayList<Edge> parentPath=parent.getPath();
+        for(Iterator<Edge>it=parentPath.iterator(); it.hasNext();)
+        {
+            Edge val=it.next();
+            path.add(val);
+
+        }
         size=n;
-        arraySize=parent.getSize();
-        distances=parent.getDistances();
+        arraySize=parent.getArraySize();
+        distances=new Integer[arraySize][];
+        for(int i=0; i<arraySize; ++i)
+        {
+            distances[i]=new Integer[arraySize];
+        }
+        for(int i=0; i<arraySize; ++i)
+            for(int j=0; j<arraySize; ++j)
+                distances[i][j]=parent.getDistances()[i][j];
         int f=e.getFrom();
         int t=e.getTo();
+          if(f<arraySize && t<arraySize)
+          {
         if(take==true)
         {
            if(path.isEmpty())
+           {
                path.add(e);
+            
+           }
            else
            {
                int index=0;
                boolean done=false;
                for(Iterator<Edge> it= path.iterator(); it.hasNext();)
                {
+                   
                     Edge a=it.next();
                     if(a.getTo()==f || a.getFrom()==t)
                     {
@@ -107,19 +126,28 @@ public class Costs {
                if(done==false)
                    path.add(e);
            }
+         
+           
             for(int i=0; i<arraySize; ++i)
             {
                 distances[f][i]=-1;
                 distances[i][t]=-1;
             }
+           //BLOKOWNIE PETLI - ZLE
+           // todo SPRAWDZIC CO Z BLOKOWNAIEM ZROBIC Z PETLA
+           //POWYPISYWAC PATHY DLA KAZDEJ MACIERZY
             if(distances[t][f]!=-1)
             distances[t][f]=INF;
+           }
             
-        }
+        
         else
         {
             distances[f][t]=INF;
         }
+          }
+        //setLowerBoundAndReduce(parent.getLowerBound());
+        //lowerBound+=getLowerBound();
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -168,8 +196,8 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.D74975C4-6175-82C6-AEC5-8021D778CB01]
     // </editor-fold> 
-    public void setLowerBoundAndReduce () {
-        int lb=0;
+    public void setLowerBoundAndReduce (int oldLowerBound) {
+        int lb=oldLowerBound;
         for(int i=0; i<arraySize; ++i)
         {
             int minPoziom=INF;
@@ -180,9 +208,10 @@ public class Costs {
             }
             for(int j=0; j<arraySize; ++j)
             {
-                if(distances[i][j]!=INF)
+                if(distances[i][j]!=INF && distances[i][j]!=-1)
                     distances[i][j]-=minPoziom;
             }
+            if(minPoziom!=INF)
             lb+=minPoziom;
         }
         for(int i=0; i<arraySize; ++i)
@@ -195,9 +224,10 @@ public class Costs {
             }
             for(int j=0; j<arraySize; ++j)
             {
-                if(distances[j][i]!=INF)
+                if(distances[j][i]!=INF &&distances[j][i]!=-1)
                 distances[j][i]-=minPion;
             }
+            if(minPion!=INF)
             lb+=minPion;
         }
         lowerBound=lb;
@@ -236,17 +266,19 @@ public class Costs {
            {
                if(distances[i][j]==0)
                {
+
                    int growth=0, min=INF;
                     for(int k=0; k<arraySize; ++k)
                     {
-                        if(k!=j && distances[i][k]<min)
+                        if(k!=j && distances[i][k]<min && distances[i][k]!=-1)
                             min=distances[i][k];
                     }
                    growth+=min;
+              
                    min=INF;
                    for(int k=0; k<arraySize; ++k)
                    {
-                       if(k!=i && distances[k][j]<min)
+                       if(k!=i && distances[k][j]<min && distances[k][j]!=-1)
                            min=distances[k][j];
                    }
                    growth+=min;
@@ -256,10 +288,10 @@ public class Costs {
                        Edge a=new Edge(i,j);
                        edgeToBranch=a;
                    }
+                   //System.out.println("hohoh"+growth);
                }
            }
        }
-       System.out.println(edgeToBranch.getFrom() +" - " +edgeToBranch.getTo());
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -277,4 +309,63 @@ public class Costs {
         }
         System.out.println();
     }
+    public void showPath()
+    {
+        for(Iterator<Edge>it=path.iterator(); it.hasNext();)
+        {
+            Edge val=it.next();
+            System.out.println(val.getFrom());
+            System.out.println(val.getTo());
+        }
+    }
+public int getArraySize()
+{
+   return arraySize;
+}
+public int findIndexInPath(Edge toPut)
+{
+    int index=1;
+    int indexToReturn=path.size();
+    boolean found=false;
+
+    for(Iterator<Edge>it=path.iterator();it.hasNext();)
+    {
+        Edge e=it.next();
+        if(e.getTo()==toPut.getFrom())
+        {
+            indexToReturn = index;
+            found=true;
+        }
+        index++;
+    }
+    if(found==false)
+    {
+    index=0;
+        for(Iterator<Edge>it=path.iterator();it.hasNext();)
+        {
+        Edge e=it.next();
+        if(e.getFrom()==toPut.getTo())
+        {
+            indexToReturn = index;
+        }
+        index++;
+        }
+    }
+    return indexToReturn;
+}
+
+public boolean pathOk()
+{
+    if(path.get(0).getFrom()!=path.get(path.size()-1).getTo())
+    {
+        return false;
+    }
+    for(int i=0; i<path.size()-1; ++i)
+    {
+        if(path.get(i).getTo()!=path.get(i+1).getFrom())
+            return false;
+    }
+    return true;
+
+}
 }

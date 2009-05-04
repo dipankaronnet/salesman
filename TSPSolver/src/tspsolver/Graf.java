@@ -13,7 +13,8 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
 // #[regen=yes,id=DCE.F1A8FC4E-4E6F-8B9B-511D-A4349D12269B]
-// </editor-fold> 
+// </editor-fold>
+/*
 public class Graf < Integer, String > extends AbstractGraph<String> {
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -31,4 +32,4 @@ public class Graf < Integer, String > extends AbstractGraph<String> {
     }
 
 }
-
+*/
