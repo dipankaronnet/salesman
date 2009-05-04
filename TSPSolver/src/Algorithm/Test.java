@@ -16,9 +16,10 @@ public class Test {
         Solver a=new Solver(6);
         a.branchAndBound();
         Costs root=(Costs)a.tree.getRoot();
-       // a.showTree(root);
+        a.createTreeVisualization();
                 a.completePath();
         a.printAnswer();
+
  /*       Costs a=new Costs(6);
         a.setDistances();
         a.setLowerBoundAndReduce();

@@ -160,8 +160,17 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.E86A8C45-4692-08F7-C201-67F546E3BCDE]
     // </editor-fold> 
-    public void setDescription (String val) {
-        this.description = val;
+    public void setDescription () {
+        description="";
+        for(int i=0; i<path.size(); ++i)
+        {
+            Edge e=path.get(i);
+            description+="(";
+            description+=e.getFrom()+1;
+            description+="-";
+            description+=e.getTo()+1;
+            description+=")";
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 

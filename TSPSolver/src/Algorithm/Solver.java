@@ -2,6 +2,7 @@ package Algorithm;
 
 import edu.uci.ics.jung.graph.*;
 import java.util.*;
+import GrafVisualization.*;
 // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
 // #[regen=yes,id=DCE.7B791AD3-C503-B12A-7E83-B53FCB270ABD]
 // </editor-fold> 
@@ -18,6 +19,8 @@ public class Solver {
     private Costs leftChild;
     private Costs minLeaf;
     boolean newMinLeaf=false;
+    private Graf treeVisualization;
+    int id=0;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.3042A9A7-FDFE-5E68-5152-3AFC6E761C5E]
@@ -106,24 +109,47 @@ public class Solver {
                     }
                 }
     }
-    public void showTree(Costs root)
+    public void showTree(Costs root, Vertex parent)
     {
              Collection<Costs>children=new ArrayList<Costs>();
              children=tree.getChildren(root);
                 for(Iterator<Costs> it=children.iterator(); it.hasNext();)
                 {
                     Costs child=it.next();
-                    System.out.println(child.getLowerBound());
+                    Vertex a=new Vertex();
+                    child.setDescription();
+                    a.setDescription(child.getDescription());
+                    treeVisualization.gv.addVertex(a);
+                    if(parent!=null)
+                    {
+                        treeVisualization.gv.addEdge(id, parent, a);
+                        ++id;
+                    }
+                   /* System.out.println(child.getLowerBound());
                     child.showDistances();
                     System.out.println("path:");
                     child.showPath();
-                    System.out.println();
+                    System.out.println();*/
+                    showTree(child,a);
                 }
-                for(Iterator<Costs> it=children.iterator(); it.hasNext();)
+              /*  for(Iterator<Costs> it=children.iterator(); it.hasNext();)
                 {
                     Costs child=it.next();
                     showTree(child);
-                }
+                }*/
+    }
+    public void createTreeVisualization()
+    {
+        treeVisualization=new Graf();
+        treeVisualization.init();
+        Costs r=(Costs)tree.getRoot();
+        Vertex a=new Vertex();
+        r.setDescription();
+        a.setDescription(r.getDescription());
+        treeVisualization.gv.addVertex(a);
+        showTree(r,a);
+        treeVisualization.drawGraf();
+
     }
     public void completePath()
     {
@@ -167,9 +193,12 @@ public class Solver {
 
     public void printAnswer()
     {
-        answer.showDistances();
-        System.out.println(answer.getLowerBound());
-        answer.showPath();
+        //answer.showDistances();
+        //System.out.println(answer.getLowerBound());
+        //answer.showPath();
+        answer.setDescription();
+        System.out.println(answer.getDescription());
+
     }
 }
 
