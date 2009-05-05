@@ -1,4 +1,4 @@
-package GrafVisualization;
+package tspsolver;
 
 
 /**
