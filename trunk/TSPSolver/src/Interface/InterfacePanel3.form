@@ -58,32 +58,32 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel3" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jButton2" linkSize="2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="291" max="32767" attributes="0"/>
+                          <EmptySpace pref="294" max="32767" attributes="0"/>
                           <Component id="jButton3" linkSize="2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel2" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel4" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel5" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel6" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel2" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel4" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel5" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel6" linkSize="5" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTextField3" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextField2" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextField3" linkSize="6" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextField2" linkSize="6" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jTextField1" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField4" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField1" linkSize="6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jTextField4" linkSize="6" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jButton4" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jButton1" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jButton4" linkSize="6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jButton1" linkSize="6" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -122,9 +122,9 @@
                       <Component id="jTextField4" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="35" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jButton5" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                  <EmptySpace pref="24" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jButton3" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="jButton2" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -137,7 +137,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Kr&#xf3;tka instrukcja obs&#x142;ugi"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Podaj ilo&#x15b;&#x107; miast i wci&#x15b;nij &quot;OK&quot;.&lt;br&gt;&#xa;Nast&#x119;pnie wpisuj po kolei koszt drogi pomi&#x119;dzy &lt;br&gt;&#xa;ka&#x17c;dymi dwoma miastami. Poszczeg&#xf3;lne koszty &lt;br&gt;&#xa;Potwierdzaj klikaj&#x105;c &quot;Dodaj&quot;&lt;br&gt;&#xa;Je&#x15b;li chcesz zobaczy&#x107; aktualn&#x105; tabel&#x119; koszt&#xf3;w wci&#x15b;nij &quot;Podgl&#x105;d&quot;&lt;br&gt;&#xa;Aby zatwierdzi&#x107; wci&#x15b;nij &quot;Dalej&quot;&lt;/html&gt;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">

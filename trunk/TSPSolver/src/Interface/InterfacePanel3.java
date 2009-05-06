@@ -65,7 +65,7 @@ public class InterfacePanel3 extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Wpisywanie", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 15))); // NOI18N
 
-        jLabel1.setText("Krótka instrukcja obsługi");
+        jLabel1.setText("<html>Podaj ilość miast i wciśnij \"OK\".<br>\nNastępnie wpisuj po kolei koszt drogi pomiędzy <br>\nkażdymi dwoma miastami. Poszczególne koszty <br>\nPotwierdzaj klikając \"Dodaj\"<br>\nJeśli chcesz zobaczyć aktualną tabelę kosztów wciśnij \"Podgląd\"<br>\nAby zatwierdzić wciśnij \"Dalej\"</html>");
 
         jLabel2.setText("Ilość miast:");
 
@@ -123,7 +123,7 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 294, Short.MAX_VALUE)
                         .addComponent(jButton3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,13 +147,11 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jLabel2, jTextField1});
-
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton2, jButton3});
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel4, jLabel5, jLabel6});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jTextField2, jTextField3, jTextField4});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton4, jTextField1, jTextField2, jTextField3, jTextField4});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,9 +177,9 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton5)
-                .addGap(36, 36, 36)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -228,16 +226,22 @@ public class InterfacePanel3 extends javax.swing.JFrame {
 
     /**Dodaje koszt drogi pomiędzy miastami do tabeli kosztów
      *m1 - miasto pierwsze, m2 - miasto drugie, k - koszt
+     * nie dodaje, jeśli m1==m2
+     * dodaje koszt "w obie strony"
      */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         int m1, m2, k;
         m1 = Integer.parseInt(jTextField2.getText());
         m2 = Integer.parseInt(jTextField3.getText());
         k = Integer.parseInt(jTextField4.getText());
-        koszty[m1-1][m2-1] = k;
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
+        if (m1!=m2)
+        {
+            koszty[m1-1][m2-1] = k;
+            koszty[m2-1][m1-1] = k;
+            jTextField2.setText("");
+            jTextField3.setText("");
+            jTextField4.setText("");
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
 /** Tworzy obiekt Costs i wpisuje do niego podane przez użytkownika odległości
@@ -247,7 +251,8 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         Costs newCosts = new Costs(ilosc);
         for(int i = 0; i<ilosc; i++)
             for(int j = 0; j<ilosc; j++)
-                newCosts.setDistances(i, j, koszty[i][j]);
+                if (koszty[i][j]!=0)
+                    newCosts.setDistances(i, j, koszty[i][j]);
         Solver a = new Solver(newCosts);
         a.branchAndBound();
         Costs root=(Costs)a.tree.getRoot();
@@ -258,37 +263,47 @@ public class InterfacePanel3 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**Podgląd tabeli
-     *prawdopodobnie trzeba zrobić Boxy na rzędy i osobny box na całośc
-     *i może wtedy zadziałą
+     *narazie nie da sie do niego nic wpisać, ale jeszcze nad tym pomyślę
      */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         JFrame Podglad = new javax.swing.JFrame();
-        JPanel NewColumn = new javax.swing.JPanel();
-        NewColumn.setLayout(new BoxLayout(NewColumn, BoxLayout.PAGE_AXIS));
+        JPanel NewRow = new javax.swing.JPanel();
+        NewRow.setLayout(new BoxLayout(NewRow, BoxLayout.LINE_AXIS));
 
         for (int i = 0; i<=ilosc; i++)
         {
-            JPanel NewRow = new javax.swing.JPanel();
-            NewRow.setLayout(new BoxLayout(NewRow, BoxLayout.LINE_AXIS));
+            JPanel NewColumn = new javax.swing.JPanel();
+            NewColumn.setLayout(new BoxLayout(NewColumn, BoxLayout.PAGE_AXIS));
             for (int j= 0; j<=ilosc; j++)
             {
                 if ((i==0)&&(j!=0))
                 {
-                    NewRow.add(new javax.swing.JLabel(String.valueOf(j)));
+                    NewColumn.add(new javax.swing.JLabel(String.valueOf(j)));
+                    NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                 }
                 else if ((i!=0)&&(j==0))
                 {
-                    NewRow.add(new javax.swing.JLabel(String.valueOf(i)));
+                    NewColumn.add(new javax.swing.JLabel(String.valueOf(i)));
+                    NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                 }
                 else if ((i!=0)&&(j!=0))
                 {
-                    NewRow.add(new javax.swing.JTextField(String.valueOf(koszty[i-1][j-1])));
+                    NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                    NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                 }
+                else
+                {
+                    NewColumn.add(new javax.swing.JLabel(" "));
+                    NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
+                }
+
             }
-            NewColumn.add(NewRow);
+            NewRow.add(NewColumn);
+            NewRow.add(Box.createRigidArea(new Dimension(0,5)));
+
         }
         
-        Podglad.add(NewColumn);
+        Podglad.add(NewRow);
         Podglad.setVisible(true);
         Podglad.pack();
 
