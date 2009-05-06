@@ -141,7 +141,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;Rozwi&#x105;zanie problemu komiwoje&#x17c;era mo&#x17c;na &lt;br&gt;&#xa;obejrze&#x107; w trzech wersjach. Pierwsza z nich podaje &lt;br&gt;&#xa;samo rozwi&#x105;zanie, Druga co&#x15b;tam innego i trzecia taka&lt;br&gt; &#xa;najbardziej wypasiona. Ko&#x17c;ystanie z programu rozpocznij &lt;br&gt;&#xa;od wyboru trybu i podania danych wej&#x15b;ciowych. &lt;br&gt;&#xa;Dane wej&#x15b;ciowe mo&#x17c;esz wpisa&#x107; r&#x119;cznie lub wczyta&#x107; z pliku.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Rozwi&#x105;zanie problemu komiwoje&#x17c;era mo&#x17c;na &lt;br&gt;&#xa;obejrze&#x107; w trzech wersjach. Pierwsza z nich podaje &lt;br&gt;&#xa;samo rozwi&#x105;zanie. Druga rysuje drzewko dla rozwi&#x105;zania&lt;br&gt;&#xa;Trzecia przedstawia rozwi&#x105;zanie krok po kroku.&lt;br&gt;&#xa;Ko&#x17c;ystanie z programu rozpocznij &lt;br&gt;&#xa;od wyboru trybu i podania danych wej&#x15b;ciowych. &lt;br&gt;&#xa;Dane wej&#x15b;ciowe mo&#x17c;esz wpisa&#x107; r&#x119;cznie lub wczyta&#x107; z pliku.&lt;/html&gt;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton1">

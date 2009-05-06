@@ -68,7 +68,7 @@ public class InterfacePanel2 extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("<html>Rozwiązanie problemu komiwojeżera można <br>\nobejrzeć w trzech wersjach. Pierwsza z nich podaje <br>\nsamo rozwiązanie, Druga cośtam innego i trzecia taka<br> \nnajbardziej wypasiona. Kożystanie z programu rozpocznij <br>\nod wyboru trybu i podania danych wejściowych. <br>\nDane wejściowe możesz wpisać ręcznie lub wczytać z pliku.</html>");
+        jLabel1.setText("<html>Rozwiązanie problemu komiwojeżera można <br>\nobejrzeć w trzech wersjach. Pierwsza z nich podaje <br>\nsamo rozwiązanie. Druga rysuje drzewko dla rozwiązania<br>\nTrzecia przedstawia rozwiązanie krok po kroku.<br>\nKożystanie z programu rozpocznij <br>\nod wyboru trybu i podania danych wejściowych. <br>\nDane wejściowe możesz wpisać ręcznie lub wczytać z pliku.</html>");
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
