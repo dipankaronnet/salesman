@@ -183,16 +183,21 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.ACCA8629-200C-821C-7C1F-C9C09A44971A]
     // </editor-fold> 
-    public void setDistances () {
+    public void setDistances (int i, int j, int k) {
         //TODO metoda ma pobierać dane wpisane przez uzytkownika
         // z gui przechwycic wartości i wstawić
         // tymczasowo wartosci wpisywane na sztywno
-        distances[0][1]=3; distances[0][2]=93; distances[0][3]=13; distances[0][4]=33;distances[0][5]=9;
+        /*distances[0][1]=3; distances[0][2]=93; distances[0][3]=13; distances[0][4]=33;distances[0][5]=9;
         distances[1][0]=4; distances[1][2]=77; distances[1][3]=42; distances[1][4]=21;distances[1][5]=16;
         distances[2][0]=45; distances[2][1]=17; distances[2][3]=36; distances[2][4]=16;distances[2][5]=28;
         distances[3][0]=39; distances[3][1]=90; distances[3][2]=80; distances[3][4]=56;distances[3][5]=7;
         distances[4][0]=28; distances[4][1]=46; distances[4][2]=88; distances[4][3]=33;distances[4][5]=25;
         distances[5][0]=3; distances[5][1]=88; distances[5][2]=18; distances[5][3]=46;distances[5][4]=92;
+    */
+    //wersja Gochy:
+        if (i< size)
+            if(j<size)
+                distances[i][j] = k;
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 

@@ -7,6 +7,9 @@
 package Interface;
 
 import Algorithm.*;
+import java.awt.FlowLayout;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  *
@@ -96,6 +99,11 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         });
 
         jButton5.setText("Podgląd");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -219,20 +227,71 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         m1 = Integer.parseInt(jTextField2.getText());
         m2 = Integer.parseInt(jTextField3.getText());
         k = Integer.parseInt(jTextField4.getText());
-        koszty[m1][m2] = k;
+        koszty[m1-1][m2-1] = k;
         jTextField2.setText("");
         jTextField3.setText("");
         jTextField4.setText("");
     }//GEN-LAST:event_jButton4ActionPerformed
 
+/** Tworzy obiekt Costs i wpisuje do niego podane przez użytkownika odległości
+ *następnie odpala Solver dla tego grafu - skopiowałam z TEST
+ */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Solver a = new Solver(ilosc);
+        Costs newCosts = new Costs(ilosc);
+        for(int i = 0; i<ilosc; i++)
+            for(int j = 0; j<ilosc; j++)
+                newCosts.setDistances(i, j, koszty[i][j]);
+        Solver a = new Solver(newCosts);
         a.branchAndBound();
         Costs root=(Costs)a.tree.getRoot();
         a.createTreeVisualization();
-                a.completePath();
+        a.completePath();
         a.printAnswer();
+        
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    /**Podgląd tabeli
+     *prawdopodobnie trzeba zrobić Boxy na rzędy i osobny box na całośc
+     *i może wtedy zadziałą
+     */
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        JFrame Podglad = new javax.swing.JFrame();
+        JLabel Numerx;
+        JLabel Numery;
+        for (int i = 0; i<=ilosc; i++)
+        {
+            /*Numerx = new javax.swing.JLabel(String.valueOf(i));
+            Numerx.setAlignmentX((float)0.5);
+            Numerx.setAlignmentY((float)(i*2));
+            Podglad.add(Numerx);
+            Numery = new javax.swing.JLabel(String.valueOf(i));
+            Numery.setAlignmentY((float)0.5);
+            Numery.setAlignmentX((float)(i*2));
+            Podglad.add(Numery);*/
+            //myCanvas Tabela = new myCanvas();
+            /*for(int j = 0; j<=ilosc; j++)
+            {
+                if ((i==0)&&(j!=0))
+                {
+                    Podglad.add(new javax.swing.JLabel(String.valueOf(j)));
+                }
+                else if ((i!=0)&&(j==0))
+                {
+                    Podglad.add(new javax.swing.JLabel(String.valueOf(i)));
+                }
+            }*/
+            Podglad.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+            Podglad.add(new javax.swing.JLabel("Hi There!"));
+            Podglad.add(new javax.swing.JLabel("Another Label"));
+
+        }
+        Podglad.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        Podglad.add(new javax.swing.JLabel("Hi There!"));
+            Podglad.add(new javax.swing.JLabel("Another Label"));
+        Podglad.setVisible(true);
+        Podglad.pack();
+
+    }//GEN-LAST:event_jButton5ActionPerformed
 
   
     // Variables declaration - do not modify//GEN-BEGIN:variables

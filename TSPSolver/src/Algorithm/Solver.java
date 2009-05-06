@@ -33,9 +33,9 @@ public class Solver {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.E00E93BC-F2F5-204E-DAF9-148AB083C5B1]
     // </editor-fold> 
-    public Solver (int n) {
-        root= new Costs(n);
-        root.setDistances();
+    public Solver (Costs root/*int n*/) {
+    //    root= new Costs(n);
+    //    root.setDistances();
         g = new DirectedSparseGraph();
         tree=new DelegateTree(g);        
         boolean ok=tree.addVertex(root);
