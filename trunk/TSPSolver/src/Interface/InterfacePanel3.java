@@ -7,9 +7,16 @@
 package Interface;
 
 import Algorithm.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -256,38 +263,32 @@ public class InterfacePanel3 extends javax.swing.JFrame {
      */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         JFrame Podglad = new javax.swing.JFrame();
-        JLabel Numerx;
-        JLabel Numery;
+        JPanel NewColumn = new javax.swing.JPanel();
+        NewColumn.setLayout(new BoxLayout(NewColumn, BoxLayout.PAGE_AXIS));
+
         for (int i = 0; i<=ilosc; i++)
         {
-            /*Numerx = new javax.swing.JLabel(String.valueOf(i));
-            Numerx.setAlignmentX((float)0.5);
-            Numerx.setAlignmentY((float)(i*2));
-            Podglad.add(Numerx);
-            Numery = new javax.swing.JLabel(String.valueOf(i));
-            Numery.setAlignmentY((float)0.5);
-            Numery.setAlignmentX((float)(i*2));
-            Podglad.add(Numery);*/
-            //myCanvas Tabela = new myCanvas();
-            /*for(int j = 0; j<=ilosc; j++)
+            JPanel NewRow = new javax.swing.JPanel();
+            NewRow.setLayout(new BoxLayout(NewRow, BoxLayout.LINE_AXIS));
+            for (int j= 0; j<=ilosc; j++)
             {
                 if ((i==0)&&(j!=0))
                 {
-                    Podglad.add(new javax.swing.JLabel(String.valueOf(j)));
+                    NewRow.add(new javax.swing.JLabel(String.valueOf(j)));
                 }
                 else if ((i!=0)&&(j==0))
                 {
-                    Podglad.add(new javax.swing.JLabel(String.valueOf(i)));
+                    NewRow.add(new javax.swing.JLabel(String.valueOf(i)));
                 }
-            }*/
-            Podglad.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-            Podglad.add(new javax.swing.JLabel("Hi There!"));
-            Podglad.add(new javax.swing.JLabel("Another Label"));
-
+                else if ((i!=0)&&(j!=0))
+                {
+                    NewRow.add(new javax.swing.JTextField(String.valueOf(koszty[i-1][j-1])));
+                }
+            }
+            NewColumn.add(NewRow);
         }
-        Podglad.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
-        Podglad.add(new javax.swing.JLabel("Hi There!"));
-            Podglad.add(new javax.swing.JLabel("Another Label"));
+        
+        Podglad.add(NewColumn);
         Podglad.setVisible(true);
         Podglad.pack();
 
