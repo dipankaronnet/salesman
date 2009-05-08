@@ -19,8 +19,8 @@ public class Solver {
     private Costs leftChild;
     private Costs minLeaf;
     boolean newMinLeaf=false;
-    private Graf treeVisualization;
-    int id=0;
+    public Graf treeVisualization;
+    int id=1;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.3042A9A7-FDFE-5E68-5152-3AFC6E761C5E]
@@ -32,7 +32,16 @@ public class Solver {
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.E00E93BC-F2F5-204E-DAF9-148AB083C5B1]
-    // </editor-fold> 
+    // </editor-fold>
+    public Solver(int n)
+    {
+        root=new Costs(n);
+        root.setDistancesTemp();
+        g = new DirectedSparseGraph();
+        tree=new DelegateTree(g);
+        boolean ok=tree.addVertex(root);
+
+    }
     public Solver (Costs root/*int n*/) {
     //    root= new Costs(n);
     //    root.setDistances();
@@ -116,7 +125,7 @@ public class Solver {
                 for(Iterator<Costs> it=children.iterator(); it.hasNext();)
                 {
                     Costs child=it.next();
-                    Vertex a=new Vertex();
+                    Vertex a=new Vertex(child.getDistances(),child.getArraySize(),child.getLowerBound());
                     child.setDescription();
                     a.setDescription(child.getDescription());
                     treeVisualization.gv.addVertex(a);
@@ -143,9 +152,10 @@ public class Solver {
         treeVisualization=new Graf();
         treeVisualization.init();
         Costs r=(Costs)tree.getRoot();
-        Vertex a=new Vertex();
+        Vertex a=new Vertex(r.getDistances(),r.getArraySize(),r.getLowerBound());
         r.setDescription();
-        a.setDescription(r.getDescription());
+        String desc=r.getDescription();
+        a.setDescription(desc);
         treeVisualization.gv.addVertex(a);
         showTree(r,a);
         treeVisualization.drawGraf();

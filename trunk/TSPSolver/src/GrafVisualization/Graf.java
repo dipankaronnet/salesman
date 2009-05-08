@@ -12,17 +12,21 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 //import org.apache.commons.collections15.*;
 //import java.awt.Dimension;
 import java.awt.geom.*;
-import javax.swing.text.Position;
 import Algorithm.*;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import javax.swing.*;
 
 public class Graf
 {
     public DirectedSparseMultigraph<Vertex,Integer>gv;
-    private Layout<Vertex,Integer>layout;
-    private Vertex findRoot()
+   public Layout<Vertex,Integer>layout;
+    public VisualizationViewer<Vertex,Integer>vv;
+   private MyPickingGraphMousePlugin<Vertex,Integer> mouse;
+   int vertexId=0;
+   int vertexCounter=0;
+    public Vertex findRoot()
     {
             Collection<Vertex>vertexes=new ArrayList<Vertex>();
             vertexes=gv.getVertices();
@@ -42,7 +46,9 @@ public class Graf
     private void setVertexPlacement(Vertex parent, Point2D parentPlacement, double wsp)
     {
        Collection<Vertex>children=new ArrayList<Vertex>();
+
         children=gv.getSuccessors(parent);
+        mouse.set(parent, parentPlacement);
         int childrenNotLeaf=0;
         int childrenCounter=0;
         double x,y;
@@ -66,6 +72,7 @@ public class Graf
                 x=parentPlacement.getX()+wsp*150;
             Point2D placement=new Point2D.Double(x, y);
             layout.setLocation(child, placement);
+            //System.out.println(child.getId()+" "+child.getDescription());
             if(childrenNotLeaf>1)
                 setVertexPlacement(child,placement,0.5*wsp);
             else
@@ -74,32 +81,66 @@ public class Graf
         }
 
     }
+    public void setId(Vertex root)
+    {
+        root.setId(vertexId);
+        ++vertexId;
+        String olddesc=root.getDescription();
+        String newdesc=Integer.toString(root.getId())+". "+olddesc;
+        root.setDescription(newdesc);
+        Collection<Vertex>children=new ArrayList<Vertex>();
+        children=gv.getSuccessors(root);
+        int childCounter=0;
+         for(Iterator<Vertex>it=children.iterator();it.hasNext();)
+        {
+            Vertex child=it.next();
+            setId(child);
+            ++childCounter;
+
+        }
+
+
+
+    }
     public void drawGraf()
     {
-        SimpleGraphDraw sgv= new SimpleGraphDraw();
+ //       SimpleGraphDraw sgv= new SimpleGraphDraw();
          layout= new CircleLayout(gv);
-       VisualizationViewer<Vertex,Integer> vv =
-        new VisualizationViewer<Vertex,Integer>(layout);
+ vv =   new VisualizationViewer<Vertex,Integer>(layout);
        vv.setPreferredSize(new Dimension(1500,1000));
        Vertex root=findRoot();
+       MyGraphMouseListener mouseListener=new MyGraphMouseListener();
+       vv.addGraphMouseListener(mouseListener);
        Point2D rootPlacement=new Point2D.Double(500.0,50.0);
+        mouse=new MyPickingGraphMousePlugin<Vertex,Integer>();
        layout.setLocation(root, rootPlacement);
+        setVertexPlacement(root,rootPlacement,1);
+        vertexId=0;
+        setId(root);
+        vertexCounter=vertexId;
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        PluggableGraphMouse gm=new PluggableGraphMouse();
+        gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK));
+        gm.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, 1.1f, 0.9f));
+        vv.setGraphMouse(gm);
+        gm.add(mouse);
+        MouseEvent e=new MouseEvent(vv, 0, 1,1, 0, 0, 0, true);
+        //mouseListener.graphClicked(e, e)
 
-       setVertexPlacement(root,rootPlacement,1);
-    vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-PluggableGraphMouse gm = new PluggableGraphMouse();
-gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK));
-gm.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, 1.1f, 0.9f));
-PickingGraphMousePlugin a=new PickingGraphMousePlugin();
-gm.add(a);
-vv.setGraphMouse(gm);
-
+        mouse.mouseClicked(e);
         JFrame frame=new JFrame("graf");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();
         frame.setVisible(true);
+      /*  Canvas1 kanwa=new Canvas1();
+        JFrame frame2=new JFrame("grafDescription");
+        frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame2.getContentPane().add(kanwa);
+        frame2.pack();
+        frame2.setVisible(true);*/
     }
+
 }
 // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
 // #[regen=yes,id=DCE.F1A8FC4E-4E6F-8B9B-511D-A4349D12269B]
