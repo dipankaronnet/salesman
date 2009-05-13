@@ -33,10 +33,13 @@ public class Solver {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.E00E93BC-F2F5-204E-DAF9-148AB083C5B1]
     // </editor-fold>
-    public Solver(int n)
+    public Solver(int n, int tab[][])
     {
         root=new Costs(n);
-        root.setDistancesTemp();
+        for(int i = 0; i<n; i++)
+            for(int j = 0; j<n; j++)
+                if(i!=j)
+                    root.setDistances(i, j, tab[i][j]);
         g = new DirectedSparseGraph();
         tree=new DelegateTree(g);
         boolean ok=tree.addVertex(root);

@@ -16,9 +16,9 @@ import java.util.*;
 public class Canva extends Canvas
 {
     Solver a;
-    public Canva()
+    public Canva(int n,int tab[][])
     {
-        a=new Solver(6);
+        a=new Solver(n,tab);
         a.branchAndBound();
         Costs root=(Costs)a.tree.getRoot();
         a.createTreeVisualization();

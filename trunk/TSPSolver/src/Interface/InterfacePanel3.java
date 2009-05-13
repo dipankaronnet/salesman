@@ -17,12 +17,16 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import GrafVisualization.*;
 
 /**
  *
  * @author zupa
  */
 public class InterfacePanel3 extends javax.swing.JFrame {
+
+     private static final int INF=100000000;
+     /** Nieskończoność w odległości miasta i-tego od i-tego*/
 
     /**Tymczasowa tablica kosztów*/
     private int[][] koszty;
@@ -237,7 +241,6 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         if (m1!=m2)
         {
             koszty[m1-1][m2-1] = k;
-            koszty[m2-1][m1-1] = k;
             jTextField2.setText("");
             jTextField3.setText("");
             jTextField4.setText("");
@@ -248,17 +251,30 @@ public class InterfacePanel3 extends javax.swing.JFrame {
  *następnie odpala Solver dla tego grafu - skopiowałam z TEST
  */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Costs newCosts = new Costs(ilosc);
+   /*     Costs newCosts = new Costs(ilosc);
         for(int i = 0; i<ilosc; i++)
             for(int j = 0; j<ilosc; j++)
-                if (koszty[i][j]!=0)
+               // if (koszty[i][j]!=0)
+                if(i!=j)
                     newCosts.setDistances(i, j, koszty[i][j]);
         Solver a = new Solver(newCosts);
         a.branchAndBound();
         Costs root=(Costs)a.tree.getRoot();
         a.createTreeVisualization();
         a.completePath();
-        a.printAnswer();
+        a.printAnswer();*/
+        for(int i=0; i<ilosc; ++i)
+        {
+            for(int j=0; j<ilosc; ++j)
+                System.out.print(koszty[i][j]);
+            System.out.println();
+        }
+        Canvas1 kanwa=new Canvas1(ilosc,koszty);
+        JFrame frame2=new JFrame("grafDescription");
+        frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame2.getContentPane().add(kanwa);
+        frame2.pack();
+        frame2.setVisible(true);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -288,7 +304,10 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                 }
                 else if ((i!=0)&&(j!=0))
                 {
-                    NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                    if(i!=j)
+                        NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                    else
+                        NewColumn.add(new javax.swing.JLabel("inf"));
                     NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                 }
                 else
