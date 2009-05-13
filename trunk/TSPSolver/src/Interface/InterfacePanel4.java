@@ -11,17 +11,41 @@
 
 package Interface;
 
+import Algorithm.Costs;
+import Algorithm.Solver;
+import GrafVisualization.Canvas1;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+
 /**
  *
  * @author zupa
  */
 public class InterfacePanel4 extends javax.swing.JFrame {
 
+    /** Tymczasowa tablica kosztów*/
+    private int[][] koszty;
+
+     /**Ilość miast*/
+    int ilosc;
+
     /** Creates new form InterfacePanel4 */
     public InterfacePanel4() {
         initComponents();
     }
 
+    /**Trzeba dodać:
+     * filtr typów
+     * obsługę plików exelowych
+     * sprawdzanie poprawności pliku
+     * obsługę wyjątków
+     */
+
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -42,6 +66,11 @@ public class InterfacePanel4 extends javax.swing.JFrame {
         jFileChooser1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Wczytaj z pliku", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 15))); // NOI18N
 
         jButton1.setText("Dalej");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Koniec");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -85,6 +114,60 @@ public class InterfacePanel4 extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int m1, m2, k;
+        String linia;
+        File plik = jFileChooser1.getSelectedFile();
+        try{
+             BufferedReader input =  new BufferedReader(new FileReader(plik));
+             ilosc = Integer.parseInt(input.readLine());
+             koszty = new int[ilosc][];
+             for (int i = 0; i<ilosc; i++)
+             {
+                koszty[i] = new int[ilosc];
+             }
+
+             for(int j = 0; j < ilosc; j++)
+             {
+                 linia = input.readLine();
+                 String[] liczby = linia.split(" ");
+                 m1 = Integer.parseInt(liczby[0]);
+                 m2 = Integer.parseInt(liczby[1]);
+                 k = Integer.parseInt(liczby[2]);
+                 koszty[m1-1][m2-1] = k;
+                 koszty[m2-1][m1-1] = k;
+             }
+
+        }
+        catch (IOException ex){
+        }
+        /*Costs newCosts = new Costs(ilosc);
+        for(int i = 0; i<ilosc; i++)
+            for(int j = 0; j<ilosc; j++)
+                if (koszty[i][j]!=0)
+                    newCosts.setDistances(i, j, koszty[i][j]);
+        Solver a = new Solver(newCosts);
+        a.branchAndBound();
+        Costs root=(Costs)a.tree.getRoot();
+        a.createTreeVisualization();
+        a.completePath();
+        a.printAnswer();*/
+        for(int i=0; i<ilosc; ++i)
+        {
+            for(int j=0; j<ilosc; ++j)
+                System.out.print(koszty[i][j]);
+            System.out.println();
+        }
+        Canvas1 kanwa=new Canvas1(ilosc,koszty);
+        JFrame frame2=new JFrame("grafDescription");
+        frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame2.getContentPane().add(kanwa);
+        frame2.pack();
+        frame2.setVisible(true);
+
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
