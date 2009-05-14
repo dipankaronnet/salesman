@@ -7,7 +7,8 @@ package GrafVisualization;
 import java.awt.geom.*;
 
 /**
- *
+ * wierzcholek tlyko nie w tym logicznym drzewie costów tlyko w wizualizacji
+ * posiada połozenie opis itd
  * @author Dorota
  */
 public class Vertex{

@@ -27,6 +27,12 @@ public class Canva extends Canvas
         setSize(1000, 1000);
     }
     @Override
+    /**
+     * metoda ktora musi bycw kazdej canvie przedefiniowna
+     * uruchamia sie sama niewiadomo keidy jak gasrbage collector i musi przyjmowac
+     * taki parametr
+     * w niej rysujemy wszelkie rzeczy na canvie - okienko z tabelkami
+     */
     public void paint(Graphics g)
     {
 
@@ -48,11 +54,14 @@ public class Canva extends Canvas
         String napis=Integer.toString(root.getId());
         //wyliczamy połozenie tabelki
         int startx,starty,rownr,colnr;
-        rownr=tableIndex/5;
-        colnr=tableIndex%5;
+        rownr=tableIndex/5; // zakladamy ze w 1 rzedzie bedzie 5 tabelek -> nrrzedu=nrtabelki/5
+        colnr=tableIndex%5; // 5 tabelek w rzedzie == 5 kolumn
+        // na podstawie nr wierrsza i kolumny wyliczamy  wsp punktu gdzie zaczynamy
+        // wypisywac tabelke jak cos bedziemy dopisywac trzeba zadbaco odpowiednie odtespy
         starty=20+rownr*200;
         startx=20+colnr*200;
-        g2.drawString(napis, startx,starty);
+        g2.drawString(napis, startx,starty); // wypisanie nr tableki
+        // wypisanie tabelki
         for(int i=0; i<root.getDistancesSize(); ++i)
         {
             //ponizsze w porzadku wypisuje nr kolumn tabelki dorobic rzedy

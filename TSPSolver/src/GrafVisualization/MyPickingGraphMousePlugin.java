@@ -24,7 +24,8 @@ import java.awt.event.*;
 import java.util.*;
 
 /**
- *
+ * tez chyba niewazne - nieuzywane  ale lepiej nie kasowac  -
+ * do klikanai w wierzcholki grafu
  * @author Dorota
  */
 public class MyPickingGraphMousePlugin<Object,Integer> extends PickingGraphMousePlugin {
