@@ -11,12 +11,17 @@ public class Costs {
     // ATRIBUTES:
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.C98302E3-1152-F130-A844-F3457B1473A9]
-    // </editor-fold> 
+    // </editor-fold>
+    /** tabela kosztów*/
     private Integer[][] distances;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.F91F661B-AEC4-C8C7-027A-C4ED2B889438]
-    // </editor-fold> 
+    // </editor-fold>
+    /**  rozmiar kosztów czasem rózny od rozmiaru tabeli
+     * w lewym poddrzewie w ykreslamy 1  wiersz i 1 kolumną size się zmniejsza
+     * w tabeli zaznaczamy te wiersze i kolumny -1 arraySize - rozmiar tabeli pozostaje bez
+     * zmian*/
     private int size;
     private int arraySize;
 
@@ -50,7 +55,10 @@ public class Costs {
 // METHODS:
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.E6C135C1-B775-4307-DEDF-6D4DDD33738D]
-    // </editor-fold> 
+    // </editor-fold>
+    /** najprostszy konstruktor wypełnia ksozty inf
+     * @param n
+     */
     public Costs (int n) {
         path=new ArrayList<Edge>();
         size=n;
@@ -68,16 +76,20 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.B06BF4CD-4CF5-1A0B-E39E-9EF2A0EBD370]
     // </editor-fold>
-            /**
-             * 2 przypadki
-         * piewszy przypadek bierzemy łuk (f,t)
-         * dodajemy łuk do ścieżki wziętych łuków dla tej macierzy kosztów w miejsce takie aby
-         * możliwie tworzyły spójną ścieżkę np (a,b)(b,c)
-         * z f już nie możemy więcej nigdzie
-         * wyjść ani wejść do t więc te rzędy 'usuwamy' wpisując wartości -1
-         * i zapobiegamy pętli ustawiając (t,f) = INF
-         */
+
+    /**
+     *
+     * @param n
+     * @param parent
+     * @param e
+     * @param take
+     * konstruktor do tworzesnia dziecka dziecko ma rozmiar n, Edge e - krawędź
+     * rodzica wg której dzieliliśmy
+     * jeżeli lewe dziecko to bierzemy tą krawędź take =true jeżeli prawe to nie
+     * take =false
+     */
     public Costs (int n, Costs parent, Edge e, boolean take) {
+        // tworzymy ścieżkę wziętych krawędzi dla dziecka = ścieżka rodzica
         path=new ArrayList<Edge>();
         ArrayList<Edge> parentPath=parent.getPath();
         for(Iterator<Edge>it=parentPath.iterator(); it.hasNext();)
@@ -85,8 +97,9 @@ public class Costs {
             Edge val=it.next();
             path.add(val);
 
-        }
-        size=n;
+        } // w tym momencie ścieżka dziecka == ścieżka rodzica
+        size=n; // już właściwy rozmiar dziecka jeżeli take==true size= rozmiar rodzica -1
+                // jezeli take==false size=rozmiar rodzica
         arraySize=parent.getArraySize();
         distances=new Integer[arraySize][];
         for(int i=0; i<arraySize; ++i)
@@ -96,26 +109,44 @@ public class Costs {
         for(int i=0; i<arraySize; ++i)
             for(int j=0; j<arraySize; ++j)
                 distances[i][j]=parent.getDistances()[i][j];
+        // tablica kosztów dziecka == tablicy kosztów rodzica
         int f=e.getFrom();
         int t=e.getTo();
+        //jezeli krawedz ktora mamy wziac ma sens czyli miejsci sie w tabeli
           if(f<arraySize && t<arraySize)
           {
-        if(take==true)
+        if(take==true) // lewe poddrzewo bierzemy krawedz
         {
-           if(path.isEmpty())
+           if(path.isEmpty()) // path pusty dodajemy e - peirwsza i ostatnia krawedz
            {
                path.add(e);
             
            }
+           //jeżeli już cośbyło w path to wstawimy od razu na właściwe miejsce
+           // tzn tak aby tworzyło możliwie nieprzerwany ciąg (a , b)(b,c)(c,d)
+           //jeżeli się tak nie da to na koniec
+           // f(rom) - początek krawedzi do wstawienia t(o)- koniec
            else
            {
                int index=0;
                boolean done=false;
-               for(Iterator<Edge> it= path.iterator(); it.hasNext();)
+               for(Iterator<Edge> it= path.iterator(); it.hasNext();) // iteruejmy po liscie krawedzi
                {
                    
-                    Edge a=it.next();
-                    if(a.getTo()==f || a.getFrom()==t)
+                    Edge a=it.next(); //bierzemy kolejny element z listy
+                    /*if(a.getTo()==f || a.getFrom()==t) // na razie nie usuwac
+                    {
+                        path.add(index,e); // wstawiamy 
+                        done=true; // wstawiony w odpowiednie miejsce
+                        break;
+                    }*/
+                    if(a.getTo()==f) // wstawiamy za elementem
+                    {
+                        path.add(index+1,e);
+                        done=true; // wstawione we wsłaściwie miejsce przerywamy działanie
+                        break;
+                    }
+                    if(a.getFrom()==t) // wstawiamyp rzed elementem
                     {
                         path.add(index,e);
                         done=true;
@@ -123,31 +154,56 @@ public class Costs {
                     }
                     ++index;
                }
-               if(done==false)
+               if(done==false) // jezeli nie znalezlismy właściwego meijsca wstawiamyn na koniec
                    path.add(e);
            }
          
-           
+           //wzieliśmy frawędź (f,t) więc nie możemy już wyjść z f ani wejść do t innym sposobem
+           // usuwamy odpowiedni rząd i kolumnę z tabeli kosztów
             for(int i=0; i<arraySize; ++i)
             {
                 distances[f][i]=-1;
                 distances[i][t]=-1;
             }
-           //BLOKOWNIE PETLI - ZLE
-           // todo SPRAWDZIC CO Z BLOKOWNAIEM ZROBIC Z PETLA
-           //POWYPISYWAC PATHY DLA KAZDEJ MACIERZY
-            if(distances[t][f]!=-1)
-            distances[t][f]=INF;
-           }
-            
-        
+           blokujPetle(); //blokuje ścieżkę przed pojawieniem się pętli
+           }        
         else
         {
             distances[f][t]=INF;
         }
-          }
+        }
         //setLowerBoundAndReduce(parent.getLowerBound());
         //lowerBound+=getLowerBound();
+    }
+
+    //nie ma problemu pustego path bo blogujPetle wyowlujemy tlyko po dodaniu patha
+    private void blokujPetle()
+    {
+
+        Iterator<Edge> it=path.iterator();
+        Edge start=it.next();
+        Edge stop=start;
+        int prev=start.getTo();
+        while(it.hasNext())
+        {
+            Edge e=it.next();
+            if(prev!=e.getFrom())
+            {
+                distances[stop.getTo()][start.getFrom()]=INF; //blokuje wszystkie spójne częsci poza ostatnią
+                start=e;
+                stop=e;
+                prev=start.getTo();
+            }
+            else
+            {
+                stop=e;
+                prev=e.getTo();
+            }
+            
+        }
+            distances[stop.getTo()][start.getFrom()]=INF;
+    // zawsze ostatnia pętla zostaje do zablokowania jeżeli path spójny to całość jeżeli nie
+    // to ostatnia część
     }
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -159,7 +215,10 @@ public class Costs {
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.E86A8C45-4692-08F7-C201-67F546E3BCDE]
-    // </editor-fold> 
+    // </editor-fold>
+    /**
+     * na podstawie path tworzy opis do gui ścieżki elementu String description
+     */
     public void setDescription () {
         description="";
         for(int i=0; i<path.size(); ++i)
@@ -219,40 +278,50 @@ public class Costs {
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.D74975C4-6175-82C6-AEC5-8021D778CB01]
-    // </editor-fold> 
+    // </editor-fold>
+    /**
+     * redukuje macierz i oblicza dolne ograniczenia
+     * @param oldLowerBound
+     */
     public void setLowerBoundAndReduce (int oldLowerBound) {
         int lb=oldLowerBound;
+        //redukcja po rzędach
         for(int i=0; i<arraySize; ++i)
         {
             int minPoziom=INF;
+            // w kazdym rzedzie wybieramy wartosć najmniejszą
             for(int j=0; j<arraySize; ++j)
             {
                 if(distances[i][j]!=-1 && distances[i][j]<minPoziom)
                     minPoziom=distances[i][j];
             }
+            // od wszystkich elelemtnów tego rzędu odejmujemy tą wartosć najmnijeszą
             for(int j=0; j<arraySize; ++j)
             {
                 if(distances[i][j]!=INF && distances[i][j]!=-1)
                     distances[i][j]-=minPoziom;
             }
             if(minPoziom!=INF)
-            lb+=minPoziom;
+            lb+=minPoziom; // do lb dodajemny najmnijesze elementy z rzedów
         }
+        //redukcja kolumn
         for(int i=0; i<arraySize; ++i)
         {
             int minPion=INF;
+            //w każdej kolumnie wybieramy najmniejszą wartość
             for(int j=0; j<arraySize; ++j)
             {
                 if(distances[j][i]!=-1 && distances[j][i]<minPion)
                     minPion=distances[j][i];
             }
+            // od wszystkich elementów kolumny odejmujemy najmniejszą wartość
             for(int j=0; j<arraySize; ++j)
             {
                 if(distances[j][i]!=INF &&distances[j][i]!=-1)
                 distances[j][i]-=minPion;
             }
             if(minPion!=INF)
-            lb+=minPion;
+            lb+=minPion; // dodajemny najmniejze elementy z kazdej kolumny
         }
         lowerBound=lb;
     }
@@ -281,17 +350,25 @@ public class Costs {
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.46E659CB-98C7-9557-1B64-452BB8831131]
-    // </editor-fold> 
+    // </editor-fold>
+    /**
+     * wyiera krawedz wg ktorej dokonujemy podziału rodzica na galaz lewa i prawa
+     */
     public void setEdgeToBranch () {
        int maxGrowth=0;
        for(int i=0; i<arraySize; ++i)
        {
            for(int j=0; j<arraySize; ++j)
            {
-               if(distances[i][j]==0)
+               // krawedz wybieramy tylko sposrod pol bedacych zerami w zredukowanej !! macierzy
+               //dla kazdego pola liczymy wzrost ograniczenia dolnego dla rozw nie zawierajcych tego luku
+               //czyli po polsku dla kazdego pola z jego rzedu i jego kolumny wybieramy najmniejszy element poza nim
+               //ich suma stanowi wzrost lb
+               //ze wszystkich wzrostow lb wybieramy max i wg tego luku ktory ma max dzielimy
+               if(distances[i][j]==0) 
                {
-
                    int growth=0, min=INF;
+                   //wybranie min dla wiersza
                     for(int k=0; k<arraySize; ++k)
                     {
                         if(k!=j && distances[i][k]<min && distances[i][k]!=-1)
@@ -300,13 +377,14 @@ public class Costs {
                    growth+=min;
               
                    min=INF;
+                   //wybranie mina dla kolumny
                    for(int k=0; k<arraySize; ++k)
                    {
                        if(k!=i && distances[k][j]<min && distances[k][j]!=-1)
                            min=distances[k][j];
                    }
-                   growth+=min;
-                   if(growth>maxGrowth)
+                   growth+=min; // przyrost dla tego luku
+                   if(growth>maxGrowth) //wybor max przyrostu
                    {
                        maxGrowth=growth;
                        Edge a=new Edge(i,j);
@@ -317,12 +395,9 @@ public class Costs {
            }
        }
     }
-
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.7E829106-F424-1058-A7FC-80968FCE53BF]
-    // </editor-fold> 
-    public void addToTree () {
-    }
+    /**
+     * wypisuje tablice kosztow na stdout
+     */
     public void showDistances()
     {
         for(int i=0; i<arraySize; ++i)
@@ -333,6 +408,9 @@ public class Costs {
         }
         System.out.println();
     }
+    /**
+     * wypisuje sciezke
+     */
     public void showPath()
     {
         for(Iterator<Edge>it=path.iterator(); it.hasNext();)
@@ -378,6 +456,10 @@ public int findIndexInPath(Edge toPut)
     return indexToReturn;
 }
 
+/**
+ * sprawdza spojnosc sciezki czy stanowi ciag spojnychp rzejsc pomiedzy miastami
+ * @return
+ */
 public boolean pathOk()
 {
     if(path.get(0).getFrom()!=path.get(path.size()-1).getTo())

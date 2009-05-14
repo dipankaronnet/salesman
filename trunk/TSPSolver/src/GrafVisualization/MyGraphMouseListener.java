@@ -9,7 +9,8 @@ import edu.uci.ics.jung.visualization.control.GraphMouseListener;
 import java.awt.event.MouseEvent;
 
 /**
- *
+ *NIEWAZNE nie uzywane chyba ale na wszelki wypadke nie kasowac bo jakby gdzies
+ * cos sie skisiło miało byc do klikania na wiercholek i pokazywnaia ale sie poddałam
  * @author Dorota
  */
 public class MyGraphMouseListener<Vertex> implements GraphMouseListener<Vertex>

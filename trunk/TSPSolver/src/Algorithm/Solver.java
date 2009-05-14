@@ -5,7 +5,11 @@ import java.util.*;
 import GrafVisualization.*;
 // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
 // #[regen=yes,id=DCE.7B791AD3-C503-B12A-7E83-B53FCB270ABD]
-// </editor-fold> 
+// </editor-fold>
+/**
+ * odpowiada za rozwiązanie problemu komiwojazera dla danej macierzy
+ * @author Dorota
+ */
 public class Solver {
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
@@ -26,13 +30,19 @@ public class Solver {
     // #[regen=yes,id=DCE.3042A9A7-FDFE-5E68-5152-3AFC6E761C5E]
     // </editor-fold> 
     private Costs rightChild;
-    private DirectedGraph<Costs,Integer>g;
-    public DelegateTree tree;
+    private DirectedGraph<Costs,Integer>g; // dane zebrane w graf
+    public DelegateTree tree; // do grafu podpiete drzewo  zeby graf sie stał drzewem były dzieci i rodzice itd
     private Costs answer;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.E00E93BC-F2F5-204E-DAF9-148AB083C5B1]
     // </editor-fold>
+    /**
+     * dana macierz jest rootem drzewa. Drzewo skałda sie z Costsów
+     * tworzymy roota i  drzewo wstawiamy roota do drzewa
+     * @param n
+     * @param tab
+     */
     public Solver(int n, int tab[][])
     {
         root=new Costs(n);
@@ -45,6 +55,10 @@ public class Solver {
         boolean ok=tree.addVertex(root);
 
     }
+    /**
+     * podobnedziałanie jak powyższego konstruktowa chyba niewykorzystywany
+     * @param root
+     */
     public Solver (Costs root/*int n*/) {
     //    root= new Costs(n);
     //    root.setDistances();
@@ -57,49 +71,69 @@ public class Solver {
             */
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.5EFAA0A4-EDC5-C78A-A7BD-D36B86FF52CA]
-    // </editor-fold> 
+    // </editor-fold>
+    /**
+     * główny algorytm
+     */
     public void branchAndBound () {
           int edgeCounter=0;
           root =(Costs)tree.getRoot();
           int size=root.getSize();
-           root.setLowerBoundAndReduce(0);
+           root.setLowerBoundAndReduce(0); //redukujemy routa jako lb jego parenta 0
            int min=INF;
         int counter=0;
+        // root zmienny w trakcie algorytmu po 1 przejsciu algorytmu znajduje najlepsze dolne
+        // ograniczenie i pelnasciezke ale moze sie tak zdazyc ze jakas inna niepelna sciezka
+        // bedzie miała mniejsze ograniczenie od naszej - pojawia sie nadzieja wtedy ten
+        // element staje się nowym rootem i dla niego zaczynamy wyliczenia
+        // w pechowej sytuacji mozemy tak do  niesk dlatego konczymy po 5 iteracjach
+        // 1 iteracja algorytmu ro redukcja roota kolejne podziały az dochodzimy do momentu
+        // gdy lewa podmacierz marozmiar 2 i konczymy algo
         while(counter<5 && root.getLowerBound()<min)
         {
          size=root.getSize();
-        while(size>2)
+        while(size>2)  // 1 iteracja algo do moemntu gdy redukowana macierz ma rozmiar 2
         {
-        root.setLowerBoundAndReduce(root.getLowerBound());
-       root.setEdgeToBranch();
+        root.setLowerBoundAndReduce(root.getLowerBound()); // redukcja i obliczenie lb
+       root.setEdgeToBranch(); // wyznaczenie luku wzgledem ktorego dzielimy
         Edge branchEdge=root.getEdgeToBranch();
+        // podział i reduckaj dzieci
         leftChild = new Costs(root.getSize()-1,root,branchEdge,true);
         leftChild.setLowerBoundAndReduce(root.getLowerBound());
         rightChild=new Costs(root.getSize(),root,branchEdge,false);
         rightChild.setLowerBoundAndReduce(root.getLowerBound());
         boolean ok;
+        // dodanie dzieci do drzewa
         ok=tree.addChild(edgeCounter,root, leftChild);
         edgeCounter++;
         ok=tree.addChild(edgeCounter, root,rightChild);
         edgeCounter++;
+        // jako nowego roota wybieramy lewe dziecko
         root=leftChild;
         --size;
-       }
-         if(counter==0)
+       } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
+         if(counter==0) // pierwsza iteracja
              answer=root;
-         if(root.getLowerBound()<answer.getLowerBound())
+         if(root.getLowerBound()<answer.getLowerBound()) // kolejne iteracje gdy daja lepsze  rozw nadpisujemy
             answer=root;
          min=root.getLowerBound();
          newMinLeaf=false;
-         chooseNext((Costs)tree.getRoot(),root.getLowerBound());
+         chooseNext((Costs)tree.getRoot(),root.getLowerBound()); // jezeli znajdzie sie jakies prawe dziecko
+         // praweczyli nie ma calej sciezki ale ma lb mnijesze czyli daje nadzieje w chooseNext ustawia new Min leaf na true
          if(newMinLeaf==true)
-             root=minLeaf;
+             root=minLeaf; // robmy nowe roota i od niego znowu algo
          else 
               break;
              ++counter;
         }
         }
-    
+
+    /**
+     * wybiera nowego roota na kolejne iteracje algo zapisuje go w minLeaf a
+     * newMinLeaf na true
+     * @param root
+     * @param oldLB
+     */
     public void chooseNext(Costs root,int oldLB)
     {
           Collection<Costs>children=new ArrayList<Costs>();
@@ -121,6 +155,11 @@ public class Solver {
                     }
                 }
     }
+    /**
+     * wypisuje drzewo
+     * @param root
+     * @param parent
+     */
     public void showTree(Costs root, Vertex parent)
     {
              Collection<Costs>children=new ArrayList<Costs>();

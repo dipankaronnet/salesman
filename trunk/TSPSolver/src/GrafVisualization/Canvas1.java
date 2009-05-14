@@ -7,7 +7,7 @@ package GrafVisualization;
 import javax.swing.*;
 import java.awt.*;
 /**
- *
+ * tworzy canve tu nie ma nic ciekawego do zmieniania
  * @author Dorota
  */
 public class Canvas1 extends JApplet {

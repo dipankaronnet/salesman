@@ -18,6 +18,10 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
+/**
+ * wizualicja dzewa gui
+ * @author Dorota
+ */
 public class Graf
 {
     public DirectedSparseMultigraph<Vertex,Integer>gv;
@@ -26,6 +30,10 @@ public class Graf
    private MyPickingGraphMousePlugin<Vertex,Integer> mouse;
    int vertexId=0;
    int vertexCounter=0;
+   /**
+    * jezlei jakis wierzcholek ma 2 krawedzie to root
+    * @return
+    */
     public Vertex findRoot()
     {
             Collection<Vertex>vertexes=new ArrayList<Vertex>();
@@ -43,11 +51,25 @@ public class Graf
     {
         gv=new DirectedSparseMultigraph<Vertex,Integer>();
     }
+
+    /**
+     * przechodzi po drzewie rekurencyjnie i na podstawie wsp rodzica znajdujemy
+     * zdzieciom miejsce
+     * TU MOZE BYC BŁAD TEZ ZE LEWE DZIECKO PO PRAWEJ STRONIE  trzeba sietemu przyjrzec
+     * @param parent
+     * @param parentPlacement
+     * @param wsp
+     */
     private void setVertexPlacement(Vertex parent, Point2D parentPlacement, double wsp)
     {
        Collection<Vertex>children=new ArrayList<Vertex>();
 
+       //zwraca nastepników w dowolnej kolejnosci dlatego w drzewie w dowonej kolejnosci
+       //trzeba je przesorotwac z mniejszym lb pierwsze zrobie to jutro
         children=gv.getSuccessors(parent);
+        Iterator<Vertex>its=children.iterator();
+        Vertex child1=its.next();
+        Vertex child2=its.next();
         mouse.set(parent, parentPlacement);
         int childrenNotLeaf=0;
         int childrenCounter=0;
@@ -55,6 +77,7 @@ public class Graf
         for(Iterator<Vertex>it=children.iterator();it.hasNext();)
         {
             Vertex child=it.next();
+            System.out.println(child.getLowerBound());
             if(gv.getSuccessorCount(child)!=0)
             {
                 childrenNotLeaf++;
@@ -81,6 +104,11 @@ public class Graf
         }
 
     }
+    /**
+     * nadaje wierzcholkowi w wizualicji nr takzeby mzona bylo skojarzyc ztabelka
+     * dodaja do opisu
+     * @param root
+     */
     public void setId(Vertex root)
     {
         root.setId(vertexId);
@@ -102,6 +130,11 @@ public class Graf
 
 
     }
+    /**
+     *  gui poki dziala to wolałabym nie wnikac jakeis myszki klikanie wyswietlenie całosci
+     * na formatce na pewno nie ma nic wspolnego z rozmieszczeniem wierzchołków i ich
+     * pozycja na formatce jakeies głupoty z myszka itd itp
+     */
     public void drawGraf()
     {
  //       SimpleGraphDraw sgv= new SimpleGraphDraw();
