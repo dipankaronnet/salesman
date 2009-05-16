@@ -6,7 +6,6 @@
 
 package Interface;
 
-import Algorithm.*;
 import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -50,7 +49,7 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         Dalej = new javax.swing.JButton();
-        koniec = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -59,6 +58,7 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         dodaj = new javax.swing.JButton();
         podglad = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,10 +84,10 @@ public class InterfacePanel3 extends javax.swing.JFrame {
             }
         });
 
-        koniec.setText("Koniec");
-        koniec.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.setText("Powrót");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                koniecActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -111,6 +111,8 @@ public class InterfacePanel3 extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setText(" ");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -122,8 +124,8 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(Dalej)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 294, Short.MAX_VALUE)
-                        .addComponent(koniec))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 292, Short.MAX_VALUE)
+                        .addComponent(jButton3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -141,12 +143,15 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(dodaj)
-                                    .addComponent(jButton1)))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel7))))))
                     .addComponent(podglad))
                 .addContainerGap())
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Dalej, koniec});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Dalej, jButton3});
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
 
@@ -160,7 +165,8 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(26, 26, 26)
@@ -180,10 +186,12 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                 .addComponent(podglad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(koniec, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(Dalej, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
+
+        jButton3.getAccessibleContext().setAccessibleName("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -206,9 +214,9 @@ public class InterfacePanel3 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**Kończy program*/
-    private void koniecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_koniecActionPerformed
-        System.exit(0);
-}//GEN-LAST:event_koniecActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.setVisible(false);
+}//GEN-LAST:event_jButton3ActionPerformed
 
     /**Wczytuje ilość miast i tworzy tymczasową tablicę kosztów
      *dopisać  wyzerowanie na początek
@@ -216,6 +224,8 @@ public class InterfacePanel3 extends javax.swing.JFrame {
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ilosc = Integer.parseInt(jTextField1.getText());
+        jLabel7.setText(jTextField1.getText());
+        jTextField1.setText(" ");
         koszty = new int[ilosc][];
         for (int i = 0; i<ilosc; i++)
         {
@@ -228,36 +238,32 @@ public class InterfacePanel3 extends javax.swing.JFrame {
      * nie dodaje, jeśli m1==m2
      * dodaje koszt "w obie strony"
      */
-    private void dodajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajActionPerformed
+    private void dodajActionPerformed(java.awt.event.ActionEvent evt) {                                      
         int m1, m2, k;
         m1 = Integer.parseInt(jTextField2.getText());
         m2 = Integer.parseInt(jTextField3.getText());
         k = Integer.parseInt(jTextField4.getText());
-        if (m1!=m2)
+        if (spr_miasta(m1, m2))
         {
             koszty[m1-1][m2-1] = k;
             jTextField2.setText("");
             jTextField3.setText("");
             jTextField4.setText("");
         }
-}//GEN-LAST:event_dodajActionPerformed
 
-/** Tworzy obiekt Costs i wpisuje do niego podane przez użytkownika odległości
- *następnie odpala Solver dla tego grafu - skopiowałam z TEST
+        else
+        {
+            //napisać, ze jest źle
+        }
+    }                                        
+
+                                     
+
+
+/** Wypisuje rozwiązanie w zależności od wybranego trybu
  */
     private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
-   /*     Costs newCosts = new Costs(ilosc);
-        for(int i = 0; i<ilosc; i++)
-            for(int j = 0; j<ilosc; j++)
-               // if (koszty[i][j]!=0)
-                if(i!=j)
-                    newCosts.setDistances(i, j, koszty[i][j]);
-        Solver a = new Solver(newCosts);
-        a.branchAndBound();
-        Costs root=(Costs)a.tree.getRoot();
-        a.createTreeVisualization();
-        a.completePath();
-        a.printAnswer();*/
+  
         for(int i=0; i<ilosc; ++i)
         {
             for(int j=0; j<ilosc; ++j)
@@ -270,7 +276,8 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         frame2.getContentPane().add(kanwa);
         frame2.pack();
         frame2.setVisible(true);
-        
+
+    this.setVisible(false);
 }//GEN-LAST:event_DalejActionPerformed
 
     /**Podgląd tabeli
@@ -323,23 +330,31 @@ public class InterfacePanel3 extends javax.swing.JFrame {
 
 }//GEN-LAST:event_podgladActionPerformed
 
+/**Sprawdza, czy podane miasta są dobre*/
+private boolean spr_miasta (int a, int b)
+{
+    if ((a <= ilosc)&&(b <= ilosc)&&(a != b))
+        return true;
+    return false;
+}
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Dalej;
     private javax.swing.JButton dodaj;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JButton koniec;
     private javax.swing.JButton podglad;
     // End of variables declaration//GEN-END:variables
 
