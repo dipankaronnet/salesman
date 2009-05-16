@@ -11,14 +11,11 @@
 
 package Interface;
 
-import Algorithm.Costs;
-import Algorithm.Solver;
 import GrafVisualization.Canvas1;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 /**
@@ -74,7 +71,7 @@ public class InterfacePanel4 extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Koniec");
+        jButton2.setText("Powrót");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -114,7 +111,7 @@ public class InterfacePanel4 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        System.exit(0);
+        this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -137,8 +134,13 @@ public class InterfacePanel4 extends javax.swing.JFrame {
                  m1 = Integer.parseInt(liczby[0]);
                  m2 = Integer.parseInt(liczby[1]);
                  k = Integer.parseInt(liczby[2]);
-                 koszty[m1-1][m2-1] = k;
+
+                 if (spr_miasta(m1, m2))
+                    koszty[m1-1][m2-1] = k;
+
+                 //koszty[m1-1][m2-1] = k;
                  //koszty[m2-1][m1-1] = k;
+
              }
              for(int i=0; i<ilosc; ++i)
              {
@@ -180,10 +182,15 @@ public class InterfacePanel4 extends javax.swing.JFrame {
         frame2.pack();
         frame2.setVisible(true);
 
-
+    this.setVisible(false);    
     }//GEN-LAST:event_jButton1ActionPerformed
 
- 
+ private boolean spr_miasta (int a, int b)
+{
+    if ((a <= ilosc)&&(b <= ilosc)&&(a != b))
+        return true;
+    return false;
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
