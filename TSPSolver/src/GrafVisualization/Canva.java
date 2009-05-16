@@ -64,18 +64,14 @@ public class Canva extends Canvas
         // wypisanie tabelki
         for(int i=0; i<root.getDistancesSize(); ++i)
         {
-            //ponizsze w porzadku wypisuje nr kolumn tabelki dorobic rzedy
-           /* napis=" ";
-            for(int j=1; j<=root.getDistancesSize(); ++j)
-                napis+=j+"   ";*/
-
-            // g2.drawString(napis,startx,starty+30);
             napis=" ";
             for(int j=0; j<root.getDistancesSize(); ++j)
             {
                // napis+=i+1+"  ";
                 if(root.getDistances()[i][j]!=100000000)
-                napis+=root.getDistances()[i][j]+"  ";
+                {
+                         napis+=root.getDistances()[i][j]+"  ";
+                }
                 else
                    napis+="inf ";
             }

@@ -64,17 +64,34 @@ public class Graf
     {
        Collection<Vertex>children=new ArrayList<Vertex>();
 
+       ArrayList<Vertex>childrenList=new ArrayList<Vertex>();
+
        //zwraca nastepników w dowolnej kolejnosci dlatego w drzewie w dowonej kolejnosci
        //trzeba je przesorotwac z mniejszym lb pierwsze zrobie to jutro
         children=gv.getSuccessors(parent);
-        Iterator<Vertex>its=children.iterator();
-        Vertex child1=its.next();
-        Vertex child2=its.next();
+         for(Iterator<Vertex>its=children.iterator();its.hasNext();)
+         {
+             Vertex el=its.next();
+             childrenList.add(el);
+         }
+        //jezeli peirwsze dziecko ma mniejsze lb to usuwamy i wrzucamy na 
+        // koniec w przeciwnym wypadku nicn ie robimy
+       Iterator <Vertex>its=childrenList.iterator();
+       if(its.hasNext())
+       {
+           Vertex child1=its.next();
+           Vertex child2=its.next();
+           if(child1.getLowerBound()>child2.getLowerBound())
+           {
+             Vertex ble=childrenList.remove(0);
+              boolean ok2=childrenList.add(child1);
+           }
+       }
         mouse.set(parent, parentPlacement);
         int childrenNotLeaf=0;
         int childrenCounter=0;
         double x,y;
-        for(Iterator<Vertex>it=children.iterator();it.hasNext();)
+        for(Iterator<Vertex>it=childrenList.iterator();it.hasNext();)
         {
             Vertex child=it.next();
             System.out.println(child.getLowerBound());
@@ -85,7 +102,7 @@ public class Graf
         }
 
         
-        for(Iterator<Vertex>it=children.iterator();it.hasNext();)
+        for(Iterator<Vertex>it=childrenList.iterator();it.hasNext();)
         {
             Vertex child=it.next();
             y=parentPlacement.getY()+50;

@@ -49,16 +49,16 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Dalej = new javax.swing.JButton();
+        koniec = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        dodaj = new javax.swing.JButton();
+        podglad = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,17 +77,17 @@ public class InterfacePanel3 extends javax.swing.JFrame {
 
         jLabel3.setText("Koszty:");
 
-        jButton2.setText("Dalej");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Dalej.setText("Dalej");
+        Dalej.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                DalejActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Koniec");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        koniec.setText("Koniec");
+        koniec.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                koniecActionPerformed(evt);
             }
         });
 
@@ -97,17 +97,17 @@ public class InterfacePanel3 extends javax.swing.JFrame {
 
         jLabel6.setText("Koszt");
 
-        jButton4.setText("Dodaj");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        dodaj.setText("Dodaj");
+        dodaj.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                dodajActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Podgląd");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        podglad.setText("Podgląd");
+        podglad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                podgladActionPerformed(evt);
             }
         });
 
@@ -121,9 +121,9 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(Dalej)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 294, Short.MAX_VALUE)
-                        .addComponent(jButton3))
+                        .addComponent(koniec))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -140,17 +140,17 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton4)
+                                    .addComponent(dodaj)
                                     .addComponent(jButton1)))))
-                    .addComponent(jButton5))
+                    .addComponent(podglad))
                 .addContainerGap())
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton2, jButton3});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Dalej, koniec});
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton4, jTextField1, jTextField2, jTextField3, jTextField4});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {dodaj, jButton1, jTextField1, jTextField2, jTextField3, jTextField4});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,13 +175,13 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(dodaj))
                 .addGap(18, 18, 18)
-                .addComponent(jButton5)
+                .addComponent(podglad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(koniec, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Dalej, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
@@ -206,9 +206,9 @@ public class InterfacePanel3 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**Kończy program*/
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void koniecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_koniecActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton3ActionPerformed
+}//GEN-LAST:event_koniecActionPerformed
 
     /**Wczytuje ilość miast i tworzy tymczasową tablicę kosztów
      *dopisać  wyzerowanie na początek
@@ -228,7 +228,7 @@ public class InterfacePanel3 extends javax.swing.JFrame {
      * nie dodaje, jeśli m1==m2
      * dodaje koszt "w obie strony"
      */
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void dodajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dodajActionPerformed
         int m1, m2, k;
         m1 = Integer.parseInt(jTextField2.getText());
         m2 = Integer.parseInt(jTextField3.getText());
@@ -240,12 +240,12 @@ public class InterfacePanel3 extends javax.swing.JFrame {
             jTextField3.setText("");
             jTextField4.setText("");
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+}//GEN-LAST:event_dodajActionPerformed
 
 /** Tworzy obiekt Costs i wpisuje do niego podane przez użytkownika odległości
  *następnie odpala Solver dla tego grafu - skopiowałam z TEST
  */
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
    /*     Costs newCosts = new Costs(ilosc);
         for(int i = 0; i<ilosc; i++)
             for(int j = 0; j<ilosc; j++)
@@ -271,12 +271,12 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         frame2.pack();
         frame2.setVisible(true);
         
-    }//GEN-LAST:event_jButton2ActionPerformed
+}//GEN-LAST:event_DalejActionPerformed
 
     /**Podgląd tabeli
      *narazie nie da sie do niego nic wpisać, ale jeszcze nad tym pomyślę
      */
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void podgladActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_podgladActionPerformed
         JFrame Podglad = new javax.swing.JFrame();
         JPanel NewRow = new javax.swing.JPanel();
         NewRow.setLayout(new BoxLayout(NewRow, BoxLayout.LINE_AXIS));
@@ -321,15 +321,13 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         Podglad.setVisible(true);
         Podglad.pack();
 
-    }//GEN-LAST:event_jButton5ActionPerformed
+}//GEN-LAST:event_podgladActionPerformed
 
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Dalej;
+    private javax.swing.JButton dodaj;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -341,6 +339,8 @@ public class InterfacePanel3 extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JButton koniec;
+    private javax.swing.JButton podglad;
     // End of variables declaration//GEN-END:variables
 
 }
