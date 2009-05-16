@@ -30,6 +30,8 @@ public class InterfacePanel4 extends javax.swing.JFrame {
     /** Tymczasowa tablica kosztów*/
     private int[][] koszty;
 
+     private static final int INF=100000000;
+
      /**Ilość miast*/
     int ilosc;
 
@@ -128,7 +130,7 @@ public class InterfacePanel4 extends javax.swing.JFrame {
                 koszty[i] = new int[ilosc];
              }
 
-             for(int j = 0; j < ilosc; j++)
+             for(int j = 0; j < ilosc*(ilosc-1); j++)
              {
                  linia = input.readLine();
                  String[] liczby = linia.split(" ");
@@ -136,7 +138,18 @@ public class InterfacePanel4 extends javax.swing.JFrame {
                  m2 = Integer.parseInt(liczby[1]);
                  k = Integer.parseInt(liczby[2]);
                  koszty[m1-1][m2-1] = k;
-                 koszty[m2-1][m1-1] = k;
+                 //koszty[m2-1][m1-1] = k;
+             }
+             for(int i=0; i<ilosc; ++i)
+             {
+                 koszty[i][i]=INF;
+             }
+             //doroty
+             for(int i=0; i<ilosc; ++i)
+             {
+                 for(int j=0; j<ilosc; ++j)
+                     System.out.print(koszty[i][j]);
+                 System.out.println();
              }
 
         }
@@ -153,10 +166,11 @@ public class InterfacePanel4 extends javax.swing.JFrame {
         a.createTreeVisualization();
         a.completePath();
         a.printAnswer();*/
+        System.out.println("koszty");
         for(int i=0; i<ilosc; ++i)
         {
             for(int j=0; j<ilosc; ++j)
-                System.out.print(koszty[i][j]);
+                System.out.print(koszty[i][j]+" ");
             System.out.println();
         }
         Canvas1 kanwa=new Canvas1(ilosc,koszty);
