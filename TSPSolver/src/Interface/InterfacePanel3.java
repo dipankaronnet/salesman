@@ -264,12 +264,12 @@ public class InterfacePanel3 extends javax.swing.JFrame {
  */
     private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
   
-        for(int i=0; i<ilosc; ++i)
+       /* for(int i=0; i<ilosc; ++i)
         {
             for(int j=0; j<ilosc; ++j)
                 System.out.print(koszty[i][j]);
             System.out.println();
-        }
+        }*/
         Canvas1 kanwa=new Canvas1(ilosc,koszty);
         JFrame frame2=new JFrame("grafDescription");
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
