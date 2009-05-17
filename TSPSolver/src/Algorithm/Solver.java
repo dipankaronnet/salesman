@@ -111,6 +111,7 @@ public class Solver {
         // jako nowego roota wybieramy lewe dziecko
         root=leftChild;
         --size;
+        createTreeVisualization();
        } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
          if(counter==0) // pierwsza iteracja
              answer=root;
