@@ -84,7 +84,8 @@ public class Graf
            if(child1.getLowerBound()>child2.getLowerBound())
            {
              Vertex ble=childrenList.remove(0);
-              boolean ok2=childrenList.add(child1);
+             childrenList.add(0, child2);
+             childrenList.add(1,ble);
            }
        }
         mouse.set(parent, parentPlacement);
@@ -107,9 +108,9 @@ public class Graf
             Vertex child=it.next();
             y=parentPlacement.getY()+50;
             if(childrenCounter%2==0)
-                x=parentPlacement.getX()-wsp*150;
+                x=parentPlacement.getX()-wsp*200;
             else
-                x=parentPlacement.getX()+wsp*150;
+                x=parentPlacement.getX()+wsp*200;
             Point2D placement=new Point2D.Double(x, y);
             layout.setLocation(child, placement);
             //System.out.println(child.getId()+" "+child.getDescription());

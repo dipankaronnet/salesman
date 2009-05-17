@@ -9,7 +9,7 @@
  * Created on 2009-05-05, 11:08:58
  */
 
-package Interface;
+package Interface; 
 
 import GrafVisualization.Canvas1;
 import java.io.BufferedReader;
