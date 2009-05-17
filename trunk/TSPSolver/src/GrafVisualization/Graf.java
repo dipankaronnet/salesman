@@ -95,7 +95,7 @@ public class Graf
         for(Iterator<Vertex>it=childrenList.iterator();it.hasNext();)
         {
             Vertex child=it.next();
-            System.out.println(child.getLowerBound());
+           // System.out.println(child.getLowerBound());
             if(gv.getSuccessorCount(child)!=0)
             {
                 childrenNotLeaf++;

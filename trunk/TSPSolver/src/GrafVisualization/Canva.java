@@ -18,13 +18,21 @@ public class Canva extends Canvas
     Solver a;
     public Canva(int n,int tab[][])
     {
+       /* wersja 2
         a=new Solver(n,tab);
         a.branchAndBound();
-        Costs root=(Costs)a.tree.getRoot();
-        a.createTreeVisualization();
         a.completePath();
         a.printAnswer();
+        a.createTreeVisualization();
         setSize(1000, 1000);
+        Costs root=(Costs)a.tree.getRoot();  koniec wersji 2*/
+
+        a=new Solver(n,tab);
+        a.branchAndBound();
+        a.completePath();
+        a.printAnswer();
+        a.branchAndBound2(4); // w parametrze podajemy ile chcemy krokow - ktory krok chcemy
+        a.createTreeVisualization();
     }
     @Override
     /**

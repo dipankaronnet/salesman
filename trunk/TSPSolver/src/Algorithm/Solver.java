@@ -24,7 +24,9 @@ public class Solver {
     private Costs minLeaf;
     boolean newMinLeaf=false;
     public Graf treeVisualization;
+    Costs rootNiezmienialny;
     int id=1;
+    int ileKrokow=0;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.3042A9A7-FDFE-5E68-5152-3AFC6E761C5E]
@@ -46,13 +48,19 @@ public class Solver {
     public Solver(int n, int tab[][])
     {
         root=new Costs(n);
+        rootNiezmienialny=new Costs(n);
         for(int i = 0; i<n; i++)
             for(int j = 0; j<n; j++)
                 if(i!=j)
+                {
                     root.setDistances(i, j, tab[i][j]);
+                    rootNiezmienialny.setDistances(i, j, tab[i][j]);
+                }
         g = new DirectedSparseGraph();
         tree=new DelegateTree(g);
         boolean ok=tree.addVertex(root);
+        //do v3
+     
 
     }
     /**
@@ -62,6 +70,7 @@ public class Solver {
     public Solver (Costs root/*int n*/) {
     //    root= new Costs(n);
     //    root.setDistances();
+        //this.root=root;
         g = new DirectedSparseGraph();
         tree=new DelegateTree(g);        
         boolean ok=tree.addVertex(root);
@@ -69,6 +78,23 @@ public class Solver {
     /* rkurencyjnie przekazywac rooota jako argument branch and bound sprawdzac czy jakis inny lisc
      * nie bedize mniejszy i jego jako argument i tak pare razy 
             */
+      /*public void dodajDrzewkoDoListy()
+      {
+        listadrzewek.add(new DelegateTree(g));
+        DelegateTree a=listadrzewek.get(0);
+         treeVisualization=new Graf();
+        treeVisualization.init();
+        Costs r=(Costs)a.getRoot();
+        System.out.println(r.getDescription());
+        Vertex b=new Vertex(r.getDistances(),r.getArraySize(),r.getLowerBound());
+        r.setDescription();
+        String desc=r.getDescription();
+        b.setDescription(desc);
+        treeVisualization.gv.addVertex(b);
+        showTree(r,b);
+        treeVisualization.drawGraf();
+
+      }*/
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.5EFAA0A4-EDC5-C78A-A7BD-D36B86FF52CA]
     // </editor-fold>
@@ -94,6 +120,7 @@ public class Solver {
          size=root.getSize();
         while(size>2)  // 1 iteracja algo do moemntu gdy redukowana macierz ma rozmiar 2
         {
+         ++ileKrokow;
         root.setLowerBoundAndReduce(root.getLowerBound()); // redukcja i obliczenie lb
        root.setEdgeToBranch(); // wyznaczenie luku wzgledem ktorego dzielimy
         Edge branchEdge=root.getEdgeToBranch();
@@ -111,7 +138,8 @@ public class Solver {
         // jako nowego roota wybieramy lewe dziecko
         root=leftChild;
         --size;
-        createTreeVisualization();
+        //createTreeVisualization();
+        //dodajDrzewkoDoListy();
        } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
          if(counter==0) // pierwsza iteracja
              answer=root;
@@ -128,9 +156,73 @@ public class Solver {
              ++counter;
         }
         }
+       public void branchAndBound2 (int ileIteracji) {
+           g=null;
+           tree=null;
+         g = new DirectedSparseGraph();
+        tree=new DelegateTree(g);
+        root=rootNiezmienialny;
+        boolean dziala=tree.addVertex(root);
+          int edgeCounter=0;
+          root =(Costs)tree.getRoot();
+          int size=root.getSize();
+           root.setLowerBoundAndReduce(0); //redukujemy routa jako lb jego parenta 0
+           int min=INF;
+        int counter=0;
+        int iteracje=0;
+        // root zmienny w trakcie algorytmu po 1 przejsciu algorytmu znajduje najlepsze dolne
+        // ograniczenie i pelnasciezke ale moze sie tak zdazyc ze jakas inna niepelna sciezka
+        // bedzie miała mniejsze ograniczenie od naszej - pojawia sie nadzieja wtedy ten
+        // element staje się nowym rootem i dla niego zaczynamy wyliczenia
+        // w pechowej sytuacji mozemy tak do  niesk dlatego konczymy po 5 iteracjach
+        // 1 iteracja algorytmu ro redukcja roota kolejne podziały az dochodzimy do momentu
+        // gdy lewa podmacierz marozmiar 2 i konczymy algo
+        while(counter<5 && root.getLowerBound()<min)
+        {
+         size=root.getSize();
+        while(size>2 && iteracje<ileIteracji)  // 1 iteracja algo do moemntu gdy redukowana macierz ma rozmiar 2
+        {
+          iteracje++;
+         ++ileKrokow;
+        root.setLowerBoundAndReduce(root.getLowerBound()); // redukcja i obliczenie lb
+       root.setEdgeToBranch(); // wyznaczenie luku wzgledem ktorego dzielimy
+        Edge branchEdge=root.getEdgeToBranch();
+        // podział i reduckaj dzieci
+        leftChild = new Costs(root.getSize()-1,root,branchEdge,true);
+        leftChild.setLowerBoundAndReduce(root.getLowerBound());
+        rightChild=new Costs(root.getSize(),root,branchEdge,false);
+        rightChild.setLowerBoundAndReduce(root.getLowerBound());
+        boolean ok;
+        // dodanie dzieci do drzewa
+        ok=tree.addChild(edgeCounter,root, leftChild);
+        edgeCounter++;
+        ok=tree.addChild(edgeCounter, root,rightChild);
+        edgeCounter++;
+        // jako nowego roota wybieramy lewe dziecko
+        root=leftChild;
+        --size;
+        //createTreeVisualization();
+        //dodajDrzewkoDoListy();
+       } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
+         if(counter==0) // pierwsza iteracja
+             answer=root;
+         if(root.getLowerBound()<answer.getLowerBound()) // kolejne iteracje gdy daja lepsze  rozw nadpisujemy
+            answer=root;
+         min=root.getLowerBound();
+         newMinLeaf=false;
+         chooseNext((Costs)tree.getRoot(),root.getLowerBound()); // jezeli znajdzie sie jakies prawe dziecko
+         // praweczyli nie ma calej sciezki ale ma lb mnijesze czyli daje nadzieje w chooseNext ustawia new Min leaf na true
+         if(newMinLeaf==true)
+             root=minLeaf; // robmy nowe roota i od niego znowu algo
+         else
+              break;
+             ++counter;
+        }
+
+        }
 
     /**
-     * wybiera nowego roota na kolejne iteracje algo zapisuje go w minLeaf a
+     * wybiera nowego roota na kolejne iteracje algo zapisuje go w minLeaf b
      * newMinLeaf na true
      * @param root
      * @param oldLB
@@ -192,6 +284,7 @@ public class Solver {
     }
     public void createTreeVisualization()
     {
+       // System.out.println("kroko"+ileKrokow);
         treeVisualization=new Graf();
         treeVisualization.init();
         Costs r=(Costs)tree.getRoot();
@@ -252,6 +345,11 @@ public class Solver {
         answer.setDescription();
         System.out.println(answer.getDescription());
 
+    }
+    public int getIleKrokow()
+    {
+
+        return ileKrokow;
     }
 }
 
