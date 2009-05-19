@@ -11,12 +11,16 @@
 
 package Interface; 
 
-import GrafVisualization.Canvas1;
+import Algorithm.Solver;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -32,9 +36,16 @@ public class InterfacePanel4 extends javax.swing.JFrame {
      /**Ilość miast*/
     int ilosc;
 
+    /**Zmienna odpowiedzialna za tryb*/
+    private int tryb;
+
+    /**Tu będzie rozwiązanie*/
+    Solver rozw;
+
     /** Creates new form InterfacePanel4 */
-    public InterfacePanel4() {
+    public InterfacePanel4(int t) {
         initComponents();
+        tryb = t;
     }
 
     /**Trzeba dodać:
@@ -118,7 +129,8 @@ public class InterfacePanel4 extends javax.swing.JFrame {
         int m1, m2, k;
         String linia;
         File plik = jFileChooser1.getSelectedFile();
-        try{
+        try
+        {
              BufferedReader input =  new BufferedReader(new FileReader(plik));
              ilosc = Integer.parseInt(input.readLine());
              koszty = new int[ilosc][];
@@ -147,49 +159,141 @@ public class InterfacePanel4 extends javax.swing.JFrame {
                  koszty[i][i]=INF;
              }
              //doroty
-             for(int i=0; i<ilosc; ++i)
+             /*for(int i=0; i<ilosc; ++i)
              {
                  for(int j=0; j<ilosc; ++j)
                      System.out.print(koszty[i][j]);
                  System.out.println();
-             }
+             }*/
 
         }
-        catch (IOException ex){
-        }
-        /*Costs newCosts = new Costs(ilosc);
-        for(int i = 0; i<ilosc; i++)
-            for(int j = 0; j<ilosc; j++)
-                if (koszty[i][j]!=0)
-                    newCosts.setDistances(i, j, koszty[i][j]);
-        Solver a = new Solver(newCosts);
-        a.branchAndBound();
-        Costs root=(Costs)a.tree.getRoot();
-        a.createTreeVisualization();
-        a.completePath();
-        a.printAnswer();*/
-        System.out.println("koszty");
-        for(int i=0; i<ilosc; ++i)
+    catch (IOException ex)
         {
-            for(int j=0; j<ilosc; ++j)
-                System.out.print(koszty[i][j]+" ");
-            System.out.println();
         }
+    rozw = new Solver(ilosc,koszty);
+    rozw.branchAndBound();
+    wypiszWynik();
+    this.setVisible(false);    
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+/**Sprawdza czy miasta są poprawne
+*/
+private boolean spr_miasta (int a, int b)
+{
+    if ((a <= ilosc)&&(b <= ilosc)&&(a != b))
+        return true;
+    return false;
+}
+
+/**Wypisuje tabelkę aktualnych kosztów
+ */
+private JPanel wypiszKoszty()
+{
+    JPanel tmpPanel = new javax.swing.JPanel();
+    tmpPanel.setLayout(new BoxLayout(tmpPanel, BoxLayout.LINE_AXIS));
+
+        for (int i = 0; i<=ilosc; i++)
+        {
+            JPanel NewColumn = new javax.swing.JPanel();
+            NewColumn.setLayout(new BoxLayout(NewColumn, BoxLayout.PAGE_AXIS));
+            for (int j= 0; j<=ilosc; j++)
+            {
+                if ((i==0)&&(j!=0))
+                {
+                    NewColumn.add(new javax.swing.JLabel(String.valueOf(j)));
+                    NewColumn.add(Box.createRigidArea(new Dimension(20,0)));
+                }
+                else if ((i!=0)&&(j==0))
+                {
+                    NewColumn.add(new javax.swing.JLabel(String.valueOf(i)));
+                    NewColumn.add(Box.createRigidArea(new Dimension(0,20)));
+                }
+                else if ((i!=0)&&(j!=0))
+                {
+                    if(i!=j)
+                        NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                    else
+                        NewColumn.add(new javax.swing.JLabel("inf"));
+                    NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
+                }
+                else
+                {
+                    NewColumn.add(new javax.swing.JLabel(" "));
+                    NewColumn.add(Box.createRigidArea(new Dimension(20,20)));
+                }
+
+            }
+            tmpPanel.add(NewColumn);
+            tmpPanel.add(Box.createRigidArea(new Dimension(10,0)));
+
+        }
+    return tmpPanel;
+}
+
+/**Tworzy nowe okienko, w którym wypisuje wynik, w drugim trybie dodatkowo
+ * rysuje drzewko i tabelki, a w trzecim pozwala krok po kroku przejrzeć
+ * rozwiązanie. Będzie też opcja zapisu wyniku do pliku, zapisu rysunku i ew.
+ * można zrobić cofnięcie się do wpisywania danych i ich modyfikację.
+ */
+private void wypiszWynik()
+{
+    JFrame Wynik = new javax.swing.JFrame();//Otwarcie nowego okienka
+    JPanel calyPanel = new javax.swing.JPanel();
+    calyPanel.setLayout(new BoxLayout(calyPanel, BoxLayout.LINE_AXIS));
+    JPanel lewyPanel = new javax.swing.JPanel();//stworzenie lewego panelu z wynikiewm tekstowym - wszystkie tryby
+    lewyPanel.setLayout(new BoxLayout(lewyPanel, BoxLayout.PAGE_AXIS));
+
+    JPanel Row1 = new javax.swing.JPanel();
+    Row1.setLayout(new BoxLayout(Row1, BoxLayout.LINE_AXIS));
+    Row1.add(new javax.swing.JLabel("Wynik otrzymany dla kosztów:"));
+    lewyPanel.add(Row1);
+    lewyPanel.add(Box.createRigidArea(new Dimension(0,20)));
+
+    JPanel Row2 = wypiszKoszty();
+    lewyPanel.add(Row2);
+    lewyPanel.add(Box.createRigidArea(new Dimension(0,20)));
+
+    JPanel Row3 = new javax.swing.JPanel();
+    Row3.setLayout(new BoxLayout(Row3, BoxLayout.LINE_AXIS));
+    Row3.add(new javax.swing.JLabel("Ścieżka:"));
+    lewyPanel.add(Row3);
+    lewyPanel.add(Box.createRigidArea(new Dimension(0,10)));
+
+    JPanel Row4 = new javax.swing.JPanel();
+    Row4.setLayout(new BoxLayout(Row4, BoxLayout.LINE_AXIS));
+    Row4.add(new javax.swing.JLabel(rozw.printAnswer2()));
+    lewyPanel.add(Row4);
+
+    calyPanel.add(lewyPanel);
+    calyPanel.add(Box.createHorizontalGlue());
+   
+
+    if(tryb==2)
+    {
+        /*
         Canvas1 kanwa=new Canvas1(ilosc,koszty);
         JFrame frame2=new JFrame("grafDescription");
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame2.getContentPane().add(kanwa);
         frame2.pack();
-        frame2.setVisible(true);
+        frame2.setVisible(true);*/
+        JPanel prawyPanel = new javax.swing.JPanel();//stworzenie lewego panelu z wynikiewm tekstowym - wszystkie tryby
+        prawyPanel.setLayout(new BoxLayout(prawyPanel, BoxLayout.PAGE_AXIS));
+        JPanel Row5 = rozw.createTreeVisualization();
+        prawyPanel.add(Row5);
+        prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+        
+        calyPanel.add(prawyPanel);
 
-    this.setVisible(false);    
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }
+    else if(tryb==3)
+    {
+    }
 
- private boolean spr_miasta (int a, int b)
-{
-    if ((a <= ilosc)&&(b <= ilosc)&&(a != b))
-        return true;
-    return false;
+Wynik.add(calyPanel);
+Wynik.setVisible(true);
+Wynik.pack();
+
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
