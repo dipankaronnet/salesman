@@ -1,6 +1,5 @@
 package Algorithm;
 import java.util.*;
-import java.lang.*;
 
 
 // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
