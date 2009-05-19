@@ -152,8 +152,12 @@ public class Graf
      *  gui poki dziala to wolałabym nie wnikac jakeis myszki klikanie wyswietlenie całosci
      * na formatce na pewno nie ma nic wspolnego z rozmieszczeniem wierzchołków i ich
      * pozycja na formatce jakeies głupoty z myszka itd itp
+     *
+     * Gocha: trochę pozmieniałam - tak, żeby dało się to połaczyć w GUI. Samo wyświetlanie.
+     * To co było dałam w komentarze. Główna zmiana to to, że funkcja ZWRACA vv!
+     * Narazie zostawiłam Twój kod, bo nie wiem jak przenieść to mouse klick
      */
-    public void drawGraf()
+    public VisualizationViewer drawGraf()
     {
  //       SimpleGraphDraw sgv= new SimpleGraphDraw();
          layout= new CircleLayout(gv);
@@ -190,6 +194,7 @@ public class Graf
         frame2.getContentPane().add(kanwa);
         frame2.pack();
         frame2.setVisible(true);*/
+        return vv;
     }
 
 }
