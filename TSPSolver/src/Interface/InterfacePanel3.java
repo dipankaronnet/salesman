@@ -6,6 +6,7 @@
 
 package Interface;
 
+import Algorithm.Solver;
 import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -28,9 +29,15 @@ public class InterfacePanel3 extends javax.swing.JFrame {
     /**Ilość miast*/
     int ilosc;
 
+    /**Zmienna odpowiedzialna za tryb*/
+    private int tryb;
+
+/**Tu będzie rozwiązanie*/
+    Solver rozw;
     /** Creates new form InterfacePanel3 */
-    public InterfacePanel3() {
+    public InterfacePanel3(int t) {
         initComponents();
+        tryb = t;
     }
 
     /** This method is called from within the constructor to
@@ -263,30 +270,38 @@ public class InterfacePanel3 extends javax.swing.JFrame {
 /** Wypisuje rozwiązanie w zależności od wybranego trybu
  */
     private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
-  
-       /* for(int i=0; i<ilosc; ++i)
-        {
-            for(int j=0; j<ilosc; ++j)
-                System.out.print(koszty[i][j]);
-            System.out.println();
-        }*/
-        Canvas1 kanwa=new Canvas1(ilosc,koszty);
-        JFrame frame2=new JFrame("grafDescription");
-        frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame2.getContentPane().add(kanwa);
-        frame2.pack();
-        frame2.setVisible(true);
-
-    this.setVisible(false);
+    rozw = new Solver(ilosc,koszty);
+    rozw.branchAndBound();
+    wypiszWynik();
 }//GEN-LAST:event_DalejActionPerformed
 
-    /**Podgląd tabeli
-     *narazie nie da sie do niego nic wpisać, ale jeszcze nad tym pomyślę
-     */
+
+/**Podgląd tabeli
+*narazie nie da sie do niego nic wpisać, ale jeszcze nad tym pomyślę
+*/
     private void podgladActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_podgladActionPerformed
         JFrame Podglad = new javax.swing.JFrame();
-        JPanel NewRow = new javax.swing.JPanel();
-        NewRow.setLayout(new BoxLayout(NewRow, BoxLayout.LINE_AXIS));
+        JPanel NewRow = wypiszKoszty();
+        Podglad.add(NewRow);
+        Podglad.setVisible(true);
+        Podglad.pack();
+
+}//GEN-LAST:event_podgladActionPerformed
+
+/**Sprawdza, czy podane miasta są dobre
+ */
+private boolean spr_miasta (int a, int b)
+{
+    if ((a <= ilosc)&&(b <= ilosc)&&(a != b))
+        return true;
+    return false;
+}
+
+/**Tworzy jPanel z aktualnymi kosztami z tabelki */
+private JPanel wypiszKoszty()
+{
+    JPanel tmpPanel = new javax.swing.JPanel();
+    tmpPanel.setLayout(new BoxLayout(tmpPanel, BoxLayout.LINE_AXIS));
 
         for (int i = 0; i<=ilosc; i++)
         {
@@ -319,24 +334,66 @@ public class InterfacePanel3 extends javax.swing.JFrame {
                 }
 
             }
-            NewRow.add(NewColumn);
-            NewRow.add(Box.createRigidArea(new Dimension(0,5)));
+            tmpPanel.add(NewColumn);
+            tmpPanel.add(Box.createRigidArea(new Dimension(0,5)));
 
         }
-        
-        Podglad.add(NewRow);
-        Podglad.setVisible(true);
-        Podglad.pack();
-
-}//GEN-LAST:event_podgladActionPerformed
-
-/**Sprawdza, czy podane miasta są dobre*/
-private boolean spr_miasta (int a, int b)
-{
-    if ((a <= ilosc)&&(b <= ilosc)&&(a != b))
-        return true;
-    return false;
+    return tmpPanel;
 }
+/**Tworzy nowe okienko, w którym wypisuje wynik, w drugim trybie dodatkowo 
+ * rysuje drzewko i tabelki, a w trzecim pozwala krok po kroku przejrzeć
+ * rozwiązanie. Będzie też opcja zapisu wyniku do pliku, zapisu rysunku i ew.
+ * można zrobić cofnięcie się do wpisywania danych i ich modyfikację. 
+ */
+private void wypiszWynik()
+{
+    JFrame Wynik = new javax.swing.JFrame();//Otwarcie nowego okienka
+    JPanel lewyPanel = new javax.swing.JPanel();//stworzenie lewego panelu z wynikiewm tekstowym - wszystkie tryby
+    lewyPanel.setLayout(new BoxLayout(lewyPanel, BoxLayout.PAGE_AXIS));
+
+    JPanel Row1 = new javax.swing.JPanel();
+    Row1.setLayout(new BoxLayout(Row1, BoxLayout.LINE_AXIS));
+    Row1.add(new javax.swing.JLabel("Wynik otrzymany dla kosztów:"));
+    lewyPanel.add(Row1);
+    lewyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+
+    JPanel Row2 = wypiszKoszty();
+    lewyPanel.add(Row2);
+    lewyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+  
+    JPanel Row3 = new javax.swing.JPanel();
+    Row3.setLayout(new BoxLayout(Row3, BoxLayout.LINE_AXIS));
+    Row3.add(new javax.swing.JLabel(rozw.printAnswer2()));
+    lewyPanel.add(Row3);
+    lewyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+
+    Wynik.add(lewyPanel);
+
+    if(tryb==2)
+    {
+        for(int i=0; i<ilosc; ++i)
+        {
+            for(int j=0; j<ilosc; ++j)
+                System.out.print(koszty[i][j]);
+            System.out.println();
+        }
+        Canvas1 kanwa=new Canvas1(ilosc,koszty);
+        JFrame frame2=new JFrame("grafDescription");
+        frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame2.getContentPane().add(kanwa);
+        frame2.pack();
+        frame2.setVisible(true);
+
+    this.setVisible(false);
+    }
+else if(tryb==3)
+    {
+    }
+Wynik.setVisible(true);
+Wynik.pack();
+
+}
+
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Dalej;
