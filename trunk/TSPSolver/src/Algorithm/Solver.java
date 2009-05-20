@@ -49,7 +49,7 @@ public class Solver {
      * @param n
      * @param tab
      */
-    public Solver(int n, int tab[][])
+    public Solver(int n, Integer tab[][])
     {
         root=new Costs(n);
         rootNiezmienialny=new Costs(n);
