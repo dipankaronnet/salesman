@@ -1,22 +1,17 @@
 package GrafVisualization;
 
 import java.lang.Object.*;
-import javax.swing.JFrame;
 import edu.uci.ics.jung.graph.*;
 import edu.uci.ics.jung.algorithms.layout.*;
-import edu.uci.ics.jung.samples.*;
 import edu.uci.ics.jung.visualization.*;
 import edu.uci.ics.jung.visualization.control.*;
 import edu.uci.ics.jung.visualization.decorators.*;
-import edu.uci.ics.jung.visualization.renderers.Renderer;
 //import org.apache.commons.collections15.*;
 //import java.awt.Dimension;
+import java.awt.Dimension;
 import java.awt.geom.*;
-import Algorithm.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.*;
 
 /**
  * wizualicja dzewa gui
@@ -155,20 +150,21 @@ public class Graf
      *
      * Gocha: trochę pozmieniałam - tak, żeby dało się to połaczyć w GUI. Samo wyświetlanie.
      * To co było dałam w komentarze. Główna zmiana to to, że funkcja ZWRACA vv!
-     * Narazie zostawiłam Twój kod, bo nie wiem jak przenieść to mouse klick
+     * Narazie zostawiłam Twój kod w komentarzach
+     * Funkcja nie tworzy nowego okienka, a sam panel, który zwraca. Na panelu jest drzewko
      */
     public VisualizationViewer drawGraf()
     {
- //       SimpleGraphDraw sgv= new SimpleGraphDraw();
-         layout= new CircleLayout(gv);
- vv =   new VisualizationViewer<Vertex,Integer>(layout);
-       vv.setPreferredSize(new Dimension(1500,1000));
-       Vertex root=findRoot();
-       MyGraphMouseListener mouseListener=new MyGraphMouseListener();
-       vv.addGraphMouseListener(mouseListener);
-       Point2D rootPlacement=new Point2D.Double(500.0,50.0);
+ //     SimpleGraphDraw sgv= new SimpleGraphDraw();
+        layout= new CircleLayout(gv);
+        vv = new VisualizationViewer<Vertex,Integer>(layout);
+        vv.setPreferredSize(new Dimension(800,500));
+        Vertex root=findRoot();
+        MyGraphMouseListener mouseListener=new MyGraphMouseListener();
+        vv.addGraphMouseListener(mouseListener);
+        Point2D rootPlacement=new Point2D.Double(500.0,50.0);
         mouse=new MyPickingGraphMousePlugin<Vertex,Integer>();
-       layout.setLocation(root, rootPlacement);
+        layout.setLocation(root, rootPlacement);
         setVertexPlacement(root,rootPlacement,1);
         vertexId=0;
         setId(root);
@@ -183,12 +179,12 @@ public class Graf
         //mouseListener.graphClicked(e, e)
 
         mouse.mouseClicked(e);
-        JFrame frame=new JFrame("graf");
+      /*  JFrame frame=new JFrame("graf");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();
         frame.setVisible(true);
-      /*  Canvas1 kanwa=new Canvas1();
+        Canvas1 kanwa=new Canvas1();
         JFrame frame2=new JFrame("grafDescription");
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame2.getContentPane().add(kanwa);
