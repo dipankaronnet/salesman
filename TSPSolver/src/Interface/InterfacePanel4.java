@@ -12,15 +12,24 @@
 package Interface; 
 
 import Algorithm.Solver;
+import GrafVisualization.Vertex;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Stack;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -29,7 +38,7 @@ import javax.swing.JPanel;
 public class InterfacePanel4 extends javax.swing.JFrame {
 
     /** Tymczasowa tablica kosztów*/
-    private int[][] koszty;
+    private Integer[][] koszty;
 
      private static final int INF=100000000;
 
@@ -133,10 +142,10 @@ public class InterfacePanel4 extends javax.swing.JFrame {
         {
              BufferedReader input =  new BufferedReader(new FileReader(plik));
              ilosc = Integer.parseInt(input.readLine());
-             koszty = new int[ilosc][];
+             koszty = new Integer[ilosc][];
              for (int i = 0; i<ilosc; i++)
              {
-                koszty[i] = new int[ilosc];
+                koszty[i] = new Integer[ilosc];
              }
 
              for(int j = 0; j < ilosc*(ilosc-1); j++)
@@ -187,7 +196,7 @@ private boolean spr_miasta (int a, int b)
 
 /**Wypisuje tabelkę aktualnych kosztów
  */
-private JPanel wypiszKoszty()
+private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
 {
     JPanel tmpPanel = new javax.swing.JPanel();
     tmpPanel.setLayout(new BoxLayout(tmpPanel, BoxLayout.LINE_AXIS));
@@ -210,7 +219,7 @@ private JPanel wypiszKoszty()
                 }
                 else if ((i!=0)&&(j!=0))
                 {
-                    if(i!=j)
+                    if((i!=j)&&(koszty[i-1][j-1]<100000))
                         NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
                     else
                         NewColumn.add(new javax.swing.JLabel("inf"));
@@ -238,6 +247,7 @@ private JPanel wypiszKoszty()
 private void wypiszWynik()
 {
     JFrame Wynik = new javax.swing.JFrame();//Otwarcie nowego okienka
+    Wynik.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     JPanel calyPanel = new javax.swing.JPanel();
     calyPanel.setLayout(new BoxLayout(calyPanel, BoxLayout.LINE_AXIS));
     JPanel lewyPanel = new javax.swing.JPanel();//stworzenie lewego panelu z wynikiewm tekstowym - wszystkie tryby
@@ -249,7 +259,7 @@ private void wypiszWynik()
     lewyPanel.add(Row1);
     lewyPanel.add(Box.createRigidArea(new Dimension(0,20)));
 
-    JPanel Row2 = wypiszKoszty();
+    JPanel Row2 = wypiszKoszty(ilosc, koszty);
     lewyPanel.add(Row2);
     lewyPanel.add(Box.createRigidArea(new Dimension(0,20)));
 
@@ -282,9 +292,11 @@ private void wypiszWynik()
         JPanel Row5 = rozw.createTreeVisualization();
         prawyPanel.add(Row5);
         prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
-        
-        calyPanel.add(prawyPanel);
-
+        prawyPanel.add(wypiszTabelki());
+        prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+        JScrollPane prawyScrollPane = new JScrollPane(prawyPanel);
+   //     prawyScrollPane.setPreferredSize(new Dimension(800, 1000));
+        calyPanel.add(prawyScrollPane);
     }
     else if(tryb==3)
     {
@@ -295,6 +307,92 @@ Wynik.setVisible(true);
 Wynik.pack();
 
 }
+
+private JPanel wypiszTabelki()
+{
+    JPanel tmpPanel = new javax.swing.JPanel();//Panel z wszystkimi tabelkami, który zostanie zwrócony
+    //tmpPanel.setPreferredSize(new Dimension(780, 500));
+   // tmpPanel.setMinimumSize(new Dimension(780, 200));
+   // tmpPanel.setMaximumSize(new Dimension(780, Short.MAX_VALUE));
+    tmpPanel.setLayout(new GridLayout(0,3,5,5));
+    tmpPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+    /******Fragmenty kodu Doroty****/
+    Stack <Vertex>stos=new Stack<Vertex>();//Stos, na który będą wrzucane kolejne wierzchołki
+    Collection<Vertex> children = new ArrayList<Vertex>();//lista "dzieci" danego wierzchołka
+    Vertex root = rozw.treeVisualization.findRoot();//pierwszy wierzch.
+    stos.push(root);
+    int tableIndex = 1; // nr aktualnie wypisywanej tabelki
+    while(!stos.isEmpty())
+    {
+        root = stos.pop();
+        JPanel tabPanel = new javax.swing.JPanel();//Osobny panel dla każdej tabelki
+        tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.PAGE_AXIS));
+        tabPanel.add(new javax.swing.JLabel("Wierzchołek nr "+Integer.toString(root.getId())));
+        tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        tabPanel.add(wypiszKoszty(root.getDistancesSize(), root.getDistances()));
+        tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        tmpPanel.add(tabPanel);
+        tmpPanel.add(Box.createRigidArea(new Dimension(10,0)));
+        tableIndex++;
+        children=rozw.treeVisualization.gv.getSuccessors(root);//wrzucenie na stos "dzieci" węzła
+        for(Iterator<Vertex>it = children.iterator();it.hasNext();)
+        {
+            Vertex naStos=it.next();
+            stos.push(naStos);
+        }
+
+    }
+    return tmpPanel;
+
+
+    /*Stack <Vertex>stos=new Stack<Vertex>();
+       Collection<Vertex> children=new ArrayList<Vertex>();
+        Vertex root=a.treeVisualization.findRoot();
+        stos.push(root);
+        int tableIndex=1; // nr aktualnie wypisywanej tabelki
+        while(stos.isEmpty()==false)
+        {
+        root=stos.pop();
+       // System.out.println(tableIndex);
+        //Wypisywanie 1 tabelki
+        String napis=Integer.toString(root.getId());
+        //wyliczamy połozenie tabelki
+        int startx,starty,rownr,colnr;
+        rownr=tableIndex/5; // zakladamy ze w 1 rzedzie bedzie 5 tabelek -> nrrzedu=nrtabelki/5
+        colnr=tableIndex%5; // 5 tabelek w rzedzie == 5 kolumn
+        // na podstawie nr wierrsza i kolumny wyliczamy  wsp punktu gdzie zaczynamy
+        // wypisywac tabelke jak cos bedziemy dopisywac trzeba zadbaco odpowiednie odtespy
+        starty=20+rownr*200;
+        startx=20+colnr*200;
+        g2.drawString(napis, startx,starty); // wypisanie nr tableki
+        // wypisanie tabelki
+        for(int i=0; i<root.getDistancesSize(); ++i)
+        {
+            napis=" ";
+            for(int j=0; j<root.getDistancesSize(); ++j)
+            {
+               // napis+=i+1+"  ";
+                if(root.getDistances()[i][j]!=100000000)
+                {
+                         napis+=root.getDistances()[i][j]+"  ";
+                }
+                else
+                   napis+="inf ";
+            }
+            g2.drawString(napis,startx,starty+20*(i+1)+30);
+        }
+        tableIndex++;
+        //koniec wypisywania tabelki
+        children=a.treeVisualization.gv.getSuccessors(root);
+        for(Iterator<Vertex>it=children.iterator();it.hasNext();)
+        {
+            Vertex naStos=it.next();
+            stos.push(naStos);
+        }
+
+        }*/
+}
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
