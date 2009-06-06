@@ -71,39 +71,16 @@ public class Solver {
      * podobnedziałanie jak powyższego konstruktowa chyba niewykorzystywany
      * @param root
      */
-    public Solver (Costs root/*int n*/) {
-    //    root= new Costs(n);
-    //    root.setDistances();
-        //this.root=root;
+    public Solver (Costs root)
+    {
         g = new DirectedSparseGraph();
         tree=new DelegateTree(g);        
         boolean ok=tree.addVertex(root);
-        }
+    }
     /* rkurencyjnie przekazywac rooota jako argument branch and bound sprawdzac czy jakis inny lisc
      * nie bedize mniejszy i jego jako argument i tak pare razy 
-            */
-      /*public void dodajDrzewkoDoListy()
-      {
-        listadrzewek.add(new DelegateTree(g));
-        DelegateTree a=listadrzewek.get(0);
-         treeVisualization=new Graf();
-        treeVisualization.init();
-        Costs r=(Costs)a.getRoot();
-        System.out.println(r.getDescription());
-        Vertex b=new Vertex(r.getDistances(),r.getArraySize(),r.getLowerBound());
-        r.setDescription();
-        String desc=r.getDescription();
-        b.setDescription(desc);
-        treeVisualization.gv.addVertex(b);
-        showTree(r,b);
-        treeVisualization.drawGraf();
-
-      }*/
-    // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
-    // #[regen=yes,id=DCE.5EFAA0A4-EDC5-C78A-A7BD-D36B86FF52CA]
-    // </editor-fold>
-
-
+     */
+     
     /**
      * główny algorytm
      */
@@ -145,23 +122,21 @@ public class Solver {
                 // jako nowego roota wybieramy lewe dziecko
                 root=leftChild;
                 --size;
-                //createTreeVisualization();
-                //dodajDrzewkoDoListy();
-           } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
-         if(counter==0) // pierwsza iteracja
-             answer=root;
-         if(root.getLowerBound()<answer.getLowerBound()) // kolejne iteracje gdy daja lepsze  rozw nadpisujemy
-             answer=root;
-         min=root.getLowerBound();
-         newMinLeaf=false;
-         chooseNext((Costs)tree.getRoot(),root.getLowerBound()); // jezeli znajdzie sie jakies prawe dziecko
-         // praweczyli nie ma calej sciezki ale ma lb mnijesze czyli daje nadzieje w chooseNext ustawia new Min leaf na true
-         if(newMinLeaf==true)
-             root=minLeaf; // robmy nowe roota i od niego znowu algo
-         else
-              break;
-         ++counter;
-         }
+            } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
+            if(counter==0) // pierwsza iteracja
+                answer=root;
+            if(root.getLowerBound()<answer.getLowerBound()) // kolejne iteracje gdy daja lepsze  rozw nadpisujemy
+                answer=root;
+            min=root.getLowerBound();
+            newMinLeaf=false;
+            chooseNext((Costs)tree.getRoot(),root.getLowerBound()); // jezeli znajdzie sie jakies prawe dziecko
+            // praweczyli nie ma calej sciezki ale ma lb mnijesze czyli daje nadzieje w chooseNext ustawia new Min leaf na true
+            if(newMinLeaf==true)
+                root=minLeaf; // robmy nowe roota i od niego znowu algo
+            else
+                break;
+            ++counter;
+        }
         return ileKrokow;
     }
        
@@ -213,8 +188,7 @@ public class Solver {
                     // jako nowego roota wybieramy lewe dziecko
                     root=leftChild;
                     --size;
-                    //createTreeVisualization();
-                    //dodajDrzewkoDoListy();
+                    
                } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
              if(counter==0) // pierwsza iteracja
                  answer=root;
@@ -266,43 +240,39 @@ public class Solver {
      */
     public void showTree(Costs root, Vertex parent)
     {
-             Collection<Costs>children=new ArrayList<Costs>();
-             children=tree.getChildren(root);
-                for(Iterator<Costs> it=children.iterator(); it.hasNext();)
-                {
-                    Costs child=it.next();
-                    Vertex a=new Vertex(child.getDistances(),child.getArraySize(),child.getLowerBound());
-                    child.setDescription();
-                    a.setDescription(child.getDescription());
-                    treeVisualization.gv.addVertex(a);
-                    if(parent!=null)
-                    {
-                        treeVisualization.gv.addEdge(id, parent, a);
-                        ++id;
-                    }
-                   /* System.out.println(child.getLowerBound());
-                    child.showDistances();
-                    System.out.println("path:");
-                    child.showPath();
-                    System.out.println();*/
-                    showTree(child,a);
-                }
-              /*  for(Iterator<Costs> it=children.iterator(); it.hasNext();)
-                {
-                    Costs child=it.next();
-                    showTree(child);
-                }*/
+        Collection<Costs>children=new ArrayList<Costs>();
+        children=tree.getChildren(root);
+        for(Iterator<Costs> it=children.iterator(); it.hasNext();)
+        {
+            Costs child=it.next();
+            Vertex a=new Vertex(child.getDistances(),child.getArraySize(),child.getLowerBound());
+            child.setDescription();
+            child.setDescription2();
+            a.setDescription(child.getDescription());
+            a.setDescription2(child.getDescription2());
+            treeVisualization.gv.addVertex(a);
+            if(parent!=null)
+            {
+                treeVisualization.gv.addEdge(id, parent, a);
+                ++id;
+            }
+            showTree(child,a);
+        }
+         
     }
+
     public JPanel createTreeVisualization()
     {
-       // System.out.println("kroko"+ileKrokow);
         treeVisualization=new Graf();
         treeVisualization.init();
         Costs r=(Costs)tree.getRoot();
         Vertex a=new Vertex(r.getDistances(),r.getArraySize(),r.getLowerBound());
         r.setDescription();
+        r.setDescription2();
         String desc=r.getDescription();
+        String desc2=r.getDescription2();
         a.setDescription(desc);
+        a.setDescription2(desc2);
         treeVisualization.gv.addVertex(a);
         showTree(r,a);
         /*******Moje zmiany*******/
@@ -318,19 +288,19 @@ public class Solver {
     {
         Edge edges[]=new Edge[3];
         int index=0;
-      for(int i=0; i<answer.getArraySize();++i)
-          for(int j=0; j<answer.getArraySize();++j)
-          {
-              if( answer.getDistances()[i][j]!=-1 && answer.getDistances()[i][j]!=INF)
-              {
-                  Edge e=new Edge(i,j);
-                  edges[index]=e;
-                  ++index;
-              }
-          }
+        for(int i=0; i<answer.getArraySize();++i)
+            for(int j=0; j<answer.getArraySize();++j)
+            {
+                if( answer.getDistances()[i][j]!=-1 && answer.getDistances()[i][j]!=INF)
+                {
+                    Edge e=new Edge(i,j);
+                    edges[index]=e;
+                    ++index;
+                }
+            }
 
         int index1,index2;
-       for(int i=0; i<3; ++i)
+        for(int i=0; i<3; ++i)
             for(int j=0; j<3; ++j)
             {
                 if(i!=j)
@@ -355,13 +325,10 @@ public class Solver {
     }
 
 
-   public void printAnswer()
+   public String printAnswer3()
     {
-        //answer.showDistances();
-        //System.out.println(answer.getLowerBound());
-        //answer.showPath();
-        answer.setDescription();
-        System.out.println(answer.getDescription());
+        answer.setDescription2();
+        return answer.getDescription2();
 
     }
 

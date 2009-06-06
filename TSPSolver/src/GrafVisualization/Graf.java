@@ -20,27 +20,27 @@ import java.util.*;
 public class Graf
 {
     public DirectedSparseMultigraph<Vertex,Integer>gv;
-   public Layout<Vertex,Integer>layout;
+    public Layout<Vertex,Integer>layout;
     public VisualizationViewer<Vertex,Integer>vv;
-   private MyPickingGraphMousePlugin<Vertex,Integer> mouse;
-   int vertexId=0;
-   int vertexCounter=0;
-   /**
+    private MyPickingGraphMousePlugin<Vertex,Integer> mouse;
+    int vertexId=0;
+    int vertexCounter=0;
+    /**
     * jezlei jakis wierzcholek ma 2 krawedzie to root
     * @return
     */
     public Vertex findRoot()
     {
-            Collection<Vertex>vertexes=new ArrayList<Vertex>();
-            vertexes=gv.getVertices();
-            Vertex root=null;
-            for(Iterator<Vertex>it=vertexes.iterator(); it.hasNext();)
-            {
-                Vertex a=it.next();
-                if(gv.degree(a)==2)
-                    root=a;
-            }
-            return root;
+        Collection<Vertex>vertexes=new ArrayList<Vertex>();
+        vertexes=gv.getVertices();
+        Vertex root=null;
+        for(Iterator<Vertex>it=vertexes.iterator(); it.hasNext();)
+        {
+            Vertex a=it.next();
+            if(gv.degree(a)==2)
+                root=a;
+        }
+        return root;
     }
     public void init()
     {
@@ -57,32 +57,31 @@ public class Graf
      */
     private void setVertexPlacement(Vertex parent, Point2D parentPlacement, double wsp)
     {
-       Collection<Vertex>children=new ArrayList<Vertex>();
+        Collection<Vertex>children=new ArrayList<Vertex>();
+        ArrayList<Vertex>childrenList=new ArrayList<Vertex>();
 
-       ArrayList<Vertex>childrenList=new ArrayList<Vertex>();
-
-       //zwraca nastepników w dowolnej kolejnosci dlatego w drzewie w dowonej kolejnosci
-       //trzeba je przesorotwac z mniejszym lb pierwsze zrobie to jutro
+        //zwraca nastepników w dowolnej kolejnosci dlatego w drzewie w dowonej kolejnosci
+        //trzeba je przesorotwac z mniejszym lb pierwsze zrobie to jutro
         children=gv.getSuccessors(parent);
-         for(Iterator<Vertex>its=children.iterator();its.hasNext();)
-         {
-             Vertex el=its.next();
-             childrenList.add(el);
-         }
+        for(Iterator<Vertex>its=children.iterator();its.hasNext();)
+        {
+            Vertex el=its.next();
+            childrenList.add(el);
+        }
         //jezeli peirwsze dziecko ma mniejsze lb to usuwamy i wrzucamy na 
         // koniec w przeciwnym wypadku nicn ie robimy
-       Iterator <Vertex>its=childrenList.iterator();
-       if(its.hasNext())
-       {
-           Vertex child1=its.next();
-           Vertex child2=its.next();
-           if(child1.getLowerBound()>child2.getLowerBound())
-           {
-             Vertex ble=childrenList.remove(0);
-             childrenList.add(0, child2);
-             childrenList.add(1,ble);
-           }
-       }
+        Iterator <Vertex>its=childrenList.iterator();
+        if(its.hasNext())
+        {
+            Vertex child1=its.next();
+            Vertex child2=its.next();
+            if(child1.getLowerBound()>child2.getLowerBound())
+            {
+                Vertex ble=childrenList.remove(0);
+                childrenList.add(0, child2);
+                childrenList.add(1,ble);
+            }
+        }
         mouse.set(parent, parentPlacement);
         int childrenNotLeaf=0;
         int childrenCounter=0;
@@ -90,13 +89,11 @@ public class Graf
         for(Iterator<Vertex>it=childrenList.iterator();it.hasNext();)
         {
             Vertex child=it.next();
-           // System.out.println(child.getLowerBound());
             if(gv.getSuccessorCount(child)!=0)
             {
                 childrenNotLeaf++;
             }
         }
-
         
         for(Iterator<Vertex>it=childrenList.iterator();it.hasNext();)
         {
@@ -108,7 +105,7 @@ public class Graf
                 x=parentPlacement.getX()+wsp*200;
             Point2D placement=new Point2D.Double(x, y);
             layout.setLocation(child, placement);
-            //System.out.println(child.getId()+" "+child.getDescription());
+
             if(childrenNotLeaf>1)
                 setVertexPlacement(child,placement,0.5*wsp);
             else
@@ -127,12 +124,13 @@ public class Graf
         root.setId(vertexId);
         ++vertexId;
         String olddesc=root.getDescription();
-        String newdesc=Integer.toString(root.getId())+". "+olddesc;
+        String olddesc2=root.getDescription2();
+        String newdesc=Integer.toString(root.getId())+". "+olddesc+"\n "+olddesc2;
         root.setDescription(newdesc);
         Collection<Vertex>children=new ArrayList<Vertex>();
         children=gv.getSuccessors(root);
         int childCounter=0;
-         for(Iterator<Vertex>it=children.iterator();it.hasNext();)
+        for(Iterator<Vertex>it=children.iterator();it.hasNext();)
         {
             Vertex child=it.next();
             setId(child);
@@ -155,7 +153,6 @@ public class Graf
      */
     public VisualizationViewer drawGraf()
     {
- //     SimpleGraphDraw sgv= new SimpleGraphDraw();
         layout= new CircleLayout(gv);
         vv = new VisualizationViewer<Vertex,Integer>(layout);
         vv.setPreferredSize(new Dimension(800,500));
@@ -176,20 +173,8 @@ public class Graf
         vv.setGraphMouse(gm);
         gm.add(mouse);
         MouseEvent e=new MouseEvent(vv, 0, 1,1, 0, 0, 0, true);
-        //mouseListener.graphClicked(e, e)
 
         mouse.mouseClicked(e);
-      /*  JFrame frame=new JFrame("graf");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.getContentPane().add(vv);
-        frame.pack();
-        frame.setVisible(true);
-        Canvas1 kanwa=new Canvas1();
-        JFrame frame2=new JFrame("grafDescription");
-        frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame2.getContentPane().add(kanwa);
-        frame2.pack();
-        frame2.setVisible(true);*/
         return vv;
     }
 
