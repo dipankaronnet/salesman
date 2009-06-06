@@ -107,7 +107,7 @@ public class Solver {
     /**
      * główny algorytm
      */
-    public void branchAndBound ()
+    public int branchAndBound ()
     {
         int edgeCounter=0;
         root =(Costs)tree.getRoot();
@@ -162,6 +162,7 @@ public class Solver {
               break;
          ++counter;
          }
+        return ileKrokow;
     }
        
     /**Druga wersja na potrzebę 3 trybu wypisywania wyniku
