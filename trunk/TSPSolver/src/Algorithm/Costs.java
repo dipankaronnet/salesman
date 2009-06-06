@@ -37,10 +37,15 @@ public class Costs {
      */
     private ArrayList<Edge> path;
 
+    /*Spis krawędzi, których nie zawiera*/
+    private ArrayList<Edge> noPath;
+
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.5275A5C1-0E3C-ED28-030E-DC9E857A5296]
     // </editor-fold> 
-    private String description;
+    private String description;//krawędzie, z którymi jest ścieżka
+
+    private String description2;//krawędzie, których nie ma w ścieżce
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.6C270CB1-6125-0FDB-19FA-3EE73D07CEAA]
@@ -60,6 +65,7 @@ public class Costs {
      */
     public Costs (int n) {
         path=new ArrayList<Edge>();
+        noPath=new ArrayList<Edge>();
         size=n;
         arraySize=n;
         distances=new Integer[arraySize][];
@@ -90,13 +96,22 @@ public class Costs {
     public Costs (int n, Costs parent, Edge e, boolean take) {
         // tworzymy ścieżkę wziętych krawędzi dla dziecka = ścieżka rodzica
         path=new ArrayList<Edge>();
+        noPath=new ArrayList<Edge>();
         ArrayList<Edge> parentPath=parent.getPath();
+        ArrayList<Edge> parentNoPath=parent.getNoPath();
         for(Iterator<Edge>it=parentPath.iterator(); it.hasNext();)
         {
             Edge val=it.next();
             path.add(val);
 
         } // w tym momencie ścieżka dziecka == ścieżka rodzica
+        for(Iterator<Edge>it=parentNoPath.iterator(); it.hasNext();)
+        {
+            Edge val=it.next();
+            noPath.add(val);
+
+        }
+
         size=n; // już właściwy rozmiar dziecka jeżeli take==true size= rozmiar rodzica -1
                 // jezeli take==false size=rozmiar rodzica
         arraySize=parent.getArraySize();
@@ -112,33 +127,28 @@ public class Costs {
         int f=e.getFrom();
         int t=e.getTo();
         //jezeli krawedz ktora mamy wziac ma sens czyli miejsci sie w tabeli
-          if(f<arraySize && t<arraySize)
-          {
-        if(take==true) // lewe poddrzewo bierzemy krawedz
+        if(f<arraySize && t<arraySize)
         {
-           if(path.isEmpty()) // path pusty dodajemy e - peirwsza i ostatnia krawedz
-           {
-               path.add(e);
+            if(take==true) // lewe poddrzewo bierzemy krawedz
+            {
+                if(path.isEmpty()) // path pusty dodajemy e - peirwsza i ostatnia krawedz
+                {
+                    path.add(e);
             
-           }
-           //jeżeli już cośbyło w path to wstawimy od razu na właściwe miejsce
-           // tzn tak aby tworzyło możliwie nieprzerwany ciąg (a , b)(b,c)(c,d)
-           //jeżeli się tak nie da to na koniec
-           // f(rom) - początek krawedzi do wstawienia t(o)- koniec
-           else
-           {
-               int index=0;
-               boolean done=false;
-               for(Iterator<Edge> it= path.iterator(); it.hasNext();) // iteruejmy po liscie krawedzi
-               {
+                }
+            //jeżeli już cośbyło w path to wstawimy od razu na właściwe miejsce
+            // tzn tak aby tworzyło możliwie nieprzerwany ciąg (a , b)(b,c)(c,d)
+            //jeżeli się tak nie da to na koniec
+            // f(rom) - początek krawedzi do wstawienia t(o)- koniec
+            else
+            {
+                int index=0;
+                boolean done=false;
+                for(Iterator<Edge> it= path.iterator(); it.hasNext();) // iteruejmy po liscie krawedzi
+                {
                    
                     Edge a=it.next(); //bierzemy kolejny element z listy
-                    /*if(a.getTo()==f || a.getFrom()==t) // na razie nie usuwac
-                    {
-                        path.add(index,e); // wstawiamy 
-                        done=true; // wstawiony w odpowiednie miejsce
-                        break;
-                    }*/
+                    
                     if(a.getTo()==f) // wstawiamy za elementem
                     {
                         path.add(index+1,e);
@@ -165,15 +175,49 @@ public class Costs {
                 distances[i][t]=-1;
             }
            blokujPetle(); //blokuje ścieżkę przed pojawieniem się pętli
-           }        
+        }        
         else
         {
-            distances[f][t]=INF;
+            if(noPath.isEmpty()) // path pusty dodajemy e - peirwsza i ostatnia krawedz
+                {
+                    noPath.add(e);
+
+                }
+            //jeżeli już cośbyło w path to wstawimy od razu na właściwe miejsce
+            // tzn tak aby tworzyło możliwie nieprzerwany ciąg (a , b)(b,c)(c,d)
+            //jeżeli się tak nie da to na koniec
+            // f(rom) - początek krawedzi do wstawienia t(o)- koniec
+            else
+            {
+                int index=0;
+                boolean done=false;
+                for(Iterator<Edge> it= noPath.iterator(); it.hasNext();) // iteruejmy po liscie krawedzi
+                {
+
+                    Edge a=it.next(); //bierzemy kolejny element z listy
+
+                    if(a.getTo()==f) // wstawiamy za elementem
+                    {
+                        noPath.add(index+1,e);
+                        done=true; // wstawione we wsłaściwie miejsce przerywamy działanie
+                        break;
+                    }
+                    if(a.getFrom()==t) // wstawiamyp rzed elementem
+                    {
+                        noPath.add(index,e);
+                        done=true;
+                        break;
+                    }
+                    ++index;
+               }
+               if(done==false) // jezeli nie znalezlismy właściwego meijsca wstawiamyn na koniec
+                   noPath.add(e);
+           }
+           distances[f][t]=INF;
         }
-        }
-        //setLowerBoundAndReduce(parent.getLowerBound());
-        //lowerBound+=getLowerBound();
-    }
+     }
+       
+ }
 
     //nie ma problemu pustego path bo blogujPetle wyowlujemy tlyko po dodaniu patha
     private void blokujPetle()
@@ -212,22 +256,47 @@ public class Costs {
         return description;
     }
 
+    public String getDescription2 () {
+        return description2;
+    }
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.E86A8C45-4692-08F7-C201-67F546E3BCDE]
     // </editor-fold>
     /**
      * na podstawie path tworzy opis do gui ścieżki elementu String description
      */
-    public void setDescription () {
+    public void setDescription ()
+    {
         description="";
-        for(int i=0; i<path.size(); ++i)
+        if (!path.isEmpty())
         {
-            Edge e=path.get(i);
-            description+="(";
-            description+=e.getFrom()+1;
-            description+="-";
-            description+=e.getTo()+1;
-            description+=")";
+            description+="z: ";
+            for(int i=0; i<path.size(); ++i)
+            {
+                Edge e=path.get(i);
+                description+="(";
+                description+=e.getFrom()+1;
+                description+="-";
+                description+=e.getTo()+1;
+                description+=") ";
+            }
+        }
+    }
+    public void setDescription2 ()
+    {
+        description2="";
+        if (!noPath.isEmpty())
+        {
+            description2+="bez: ";
+            for(int i=0; i<noPath.size(); ++i)
+            {
+                Edge e=noPath.get(i);
+                description2+="(";
+                description2+=e.getFrom()+1;
+                description2+="-";
+                description2+=e.getTo()+1;
+                description2+=") ";
+            }
         }
     }
 
@@ -241,33 +310,13 @@ public class Costs {
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.ACCA8629-200C-821C-7C1F-C9C09A44971A]
     // </editor-fold> 
-    public void setDistances (int i, int j, int k) {
-        //TODO metoda ma pobierać dane wpisane przez uzytkownika
-        // z gui przechwycic wartości i wstawić
-        // tymczasowo wartosci wpisywane na sztywno
-        /*distances[0][1]=3; distances[0][2]=93; distances[0][3]=13; distances[0][4]=33;distances[0][5]=9;
-        distances[1][0]=4; distances[1][2]=77; distances[1][3]=42; distances[1][4]=21;distances[1][5]=16;
-        distances[2][0]=45; distances[2][1]=17; distances[2][3]=36; distances[2][4]=16;distances[2][5]=28;
-        distances[3][0]=39; distances[3][1]=90; distances[3][2]=80; distances[3][4]=56;distances[3][5]=7;
-        distances[4][0]=28; distances[4][1]=46; distances[4][2]=88; distances[4][3]=33;distances[4][5]=25;
-        distances[5][0]=3; distances[5][1]=88; distances[5][2]=18; distances[5][3]=46;distances[5][4]=92;
-    */
-
-    //wersja Gochy:
+    public void setDistances (int i, int j, int k)
+    {
         if (i< size)
             if(j<size)
                 distances[i][j] = k;
     }
-   /* public void setDistancesTemp()
-    {
-        distances[0][1]=3; distances[0][2]=93; distances[0][3]=13; distances[0][4]=33;distances[0][5]=9;
-        distances[1][0]=4; distances[1][2]=77; distances[1][3]=42; distances[1][4]=21;distances[1][5]=16;
-        distances[2][0]=45; distances[2][1]=17; distances[2][3]=36; distances[2][4]=16;distances[2][5]=28;
-        distances[3][0]=39; distances[3][1]=90; distances[3][2]=80; distances[3][4]=56;distances[3][5]=7;
-        distances[4][0]=28; distances[4][1]=46; distances[4][2]=88; distances[4][3]=33;distances[4][5]=25;
-        distances[5][0]=3; distances[5][1]=88; distances[5][2]=18; distances[5][3]=46;distances[5][4]=92;
-    }*/
-
+  
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.B41B1FF7-A0B4-FF0D-EC1F-FF846CD47B13]
     // </editor-fold> 
@@ -332,6 +381,10 @@ public class Costs {
         return path;
     }
 
+    public ArrayList<Edge> getNoPath () {
+        return noPath;
+    }
+
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,regenBody=yes,id=DCE.51DD69AC-26BB-EB64-8462-AD56CCC6E583]
     // </editor-fold> 
@@ -389,40 +442,16 @@ public class Costs {
                        Edge a=new Edge(i,j);
                        edgeToBranch=a;
                    }
-                   //System.out.println("hohoh"+growth);
                }
            }
        }
     }
-    /**
-     * wypisuje tablice kosztow na stdout
-     */
-    public void showDistances()
-    {
-        for(int i=0; i<arraySize; ++i)
-        {
-            for(int j=0; j<arraySize; ++j)
-                System.out.print(distances[i][j]+" ");
-            System.out.println();
-        }
-        System.out.println();
-    }
-    /**
-     * wypisuje sciezke
-     */
-    public void showPath()
-    {
-        for(Iterator<Edge>it=path.iterator(); it.hasNext();)
-        {
-            Edge val=it.next();
-            System.out.println(val.getFrom());
-            System.out.println(val.getTo());
-        }
-    }
+    
 public int getArraySize()
 {
    return arraySize;
 }
+
 public int findIndexInPath(Edge toPut)
 {
     int index=1;

@@ -13,6 +13,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import GrafVisualization.*;
+import java.awt.ComponentOrientation;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Stack;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -20,11 +28,12 @@ import GrafVisualization.*;
  */
 public class InterfacePanel3 extends javax.swing.JFrame {
 
-     private static final int INF=100000000;
-     /** Nieskończoność w odległości miasta i-tego od i-tego*/
+
+    /** Nieskończoność w odległości miasta i-tego od i-tego*/
+    private static final int INF=100000000;
 
     /**Tymczasowa tablica kosztów*/
-    private int[][] koszty;
+    private Integer[][] koszty;
 
     /**Ilość miast*/
     int ilosc;
@@ -32,8 +41,15 @@ public class InterfacePanel3 extends javax.swing.JFrame {
     /**Zmienna odpowiedzialna za tryb*/
     private int tryb;
 
-/**Tu będzie rozwiązanie*/
+    /**Tu będzie rozwiązanie*/
     Solver rozw;
+
+    /**Ile iteracji - liczy pierwsze wywołanie B&B**/
+    int iteracje;
+
+    /**Ktora iteracja jest aktualnie wykonywana w trzecim trybie*/
+    int ktoraIteracja = 1;
+
     /** Creates new form InterfacePanel3 */
     public InterfacePanel3(int t) {
         initComponents();
@@ -233,10 +249,10 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         ilosc = Integer.parseInt(jTextField1.getText());
         jLabel7.setText(jTextField1.getText());
         jTextField1.setText(" ");
-        koszty = new int[ilosc][];
+        koszty = new Integer[ilosc][];
         for (int i = 0; i<ilosc; i++)
         {
-            koszty[i] = new int[ilosc];
+            koszty[i] = new Integer[ilosc];
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -271,8 +287,10 @@ public class InterfacePanel3 extends javax.swing.JFrame {
  */
     private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
     rozw = new Solver(ilosc,koszty);
-    rozw.branchAndBound();
+    iteracje = rozw.branchAndBound()+1;
+    rozw.completePath();
     wypiszWynik();
+    this.setVisible(false);
 }//GEN-LAST:event_DalejActionPerformed
 
 
@@ -281,7 +299,7 @@ public class InterfacePanel3 extends javax.swing.JFrame {
 */
     private void podgladActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_podgladActionPerformed
         JFrame Podglad = new javax.swing.JFrame();
-        JPanel NewRow = wypiszKoszty();
+        JPanel NewRow = wypiszKoszty(ilosc, koszty);
         Podglad.add(NewRow);
         Podglad.setVisible(true);
         Podglad.pack();
@@ -297,8 +315,9 @@ private boolean spr_miasta (int a, int b)
     return false;
 }
 
-/**Tworzy jPanel z aktualnymi kosztami z tabelki */
-private JPanel wypiszKoszty()
+/**Wypisuje tabelkę aktualnych kosztów
+ */
+private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
 {
     JPanel tmpPanel = new javax.swing.JPanel();
     tmpPanel.setLayout(new BoxLayout(tmpPanel, BoxLayout.LINE_AXIS));
@@ -312,17 +331,22 @@ private JPanel wypiszKoszty()
                 if ((i==0)&&(j!=0))
                 {
                     NewColumn.add(new javax.swing.JLabel(String.valueOf(j)));
-                    NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
+                    NewColumn.add(Box.createRigidArea(new Dimension(20,0)));
                 }
                 else if ((i!=0)&&(j==0))
                 {
                     NewColumn.add(new javax.swing.JLabel(String.valueOf(i)));
-                    NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
+                    NewColumn.add(Box.createRigidArea(new Dimension(0,20)));
                 }
                 else if ((i!=0)&&(j!=0))
                 {
-                    if(i!=j)
-                        NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                    if((i!=j)&&(koszty[i-1][j-1]<100000))
+                    {
+                        if (koszty[i-1][j-1]<0)
+                            NewColumn.add(new javax.swing.JLabel(" "));
+                        else
+                            NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                    }
                     else
                         NewColumn.add(new javax.swing.JLabel("inf"));
                     NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
@@ -330,24 +354,28 @@ private JPanel wypiszKoszty()
                 else
                 {
                     NewColumn.add(new javax.swing.JLabel(" "));
-                    NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
+                    NewColumn.add(Box.createRigidArea(new Dimension(20,20)));
                 }
 
             }
             tmpPanel.add(NewColumn);
-            tmpPanel.add(Box.createRigidArea(new Dimension(0,5)));
+            tmpPanel.add(Box.createRigidArea(new Dimension(10,0)));
 
         }
     return tmpPanel;
 }
-/**Tworzy nowe okienko, w którym wypisuje wynik, w drugim trybie dodatkowo 
+
+/**Tworzy nowe okienko, w którym wypisuje wynik, w drugim trybie dodatkowo
  * rysuje drzewko i tabelki, a w trzecim pozwala krok po kroku przejrzeć
  * rozwiązanie. Będzie też opcja zapisu wyniku do pliku, zapisu rysunku i ew.
- * można zrobić cofnięcie się do wpisywania danych i ich modyfikację. 
+ * można zrobić cofnięcie się do wpisywania danych i ich modyfikację.
  */
 private void wypiszWynik()
 {
-    JFrame Wynik = new javax.swing.JFrame();//Otwarcie nowego okienka
+    final JFrame Wynik = new javax.swing.JFrame();//Otwarcie nowego okienka
+    Wynik.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    JPanel calyPanel = new javax.swing.JPanel();
+    calyPanel.setLayout(new BoxLayout(calyPanel, BoxLayout.LINE_AXIS));
     JPanel lewyPanel = new javax.swing.JPanel();//stworzenie lewego panelu z wynikiewm tekstowym - wszystkie tryby
     lewyPanel.setLayout(new BoxLayout(lewyPanel, BoxLayout.PAGE_AXIS));
 
@@ -355,45 +383,145 @@ private void wypiszWynik()
     Row1.setLayout(new BoxLayout(Row1, BoxLayout.LINE_AXIS));
     Row1.add(new javax.swing.JLabel("Wynik otrzymany dla kosztów:"));
     lewyPanel.add(Row1);
-    lewyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+    lewyPanel.add(Box.createRigidArea(new Dimension(0,20)));
 
-    JPanel Row2 = wypiszKoszty();
+    JPanel Row2 = wypiszKoszty(ilosc, koszty);
     lewyPanel.add(Row2);
-    lewyPanel.add(Box.createRigidArea(new Dimension(5,0)));
-  
+    lewyPanel.add(Box.createRigidArea(new Dimension(0,20)));
+
     JPanel Row3 = new javax.swing.JPanel();
     Row3.setLayout(new BoxLayout(Row3, BoxLayout.LINE_AXIS));
-    Row3.add(new javax.swing.JLabel(rozw.printAnswer2()));
+    Row3.add(new javax.swing.JLabel("Została wybrana ścieżka "));
     lewyPanel.add(Row3);
-    lewyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+    lewyPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
-    Wynik.add(lewyPanel);
+    JPanel Row4 = new javax.swing.JPanel();
+    Row4.setLayout(new BoxLayout(Row4, BoxLayout.LINE_AXIS));
+    Row4.add(new javax.swing.JLabel(rozw.printAnswer2()));
+    lewyPanel.add(Row4);
 
+    JPanel Row6 = new javax.swing.JPanel();
+    Row6.setLayout(new BoxLayout(Row6, BoxLayout.LINE_AXIS));
+    Row6.add(new javax.swing.JLabel(rozw.printAnswer3()));
+    lewyPanel.add(Row6);
+
+    calyPanel.add(lewyPanel);
+    calyPanel.add(Box.createHorizontalGlue());
+
+    /*Jesli tryb==2, to poza wypisaniem wyniku tekstowego pojawia się okienko
+     z narysowanym drzewkiem dloa ostatecznego wyniku.
+     generalnie: prawyPanel przechowuje rysunek i tabelki, a pawy ScrollPane
+     jest po to, żeby się dało przewijać w dół, jak jest za długie.
+     */
     if(tryb==2)
     {
-        for(int i=0; i<ilosc; ++i)
-        {
-            for(int j=0; j<ilosc; ++j)
-                System.out.print(koszty[i][j]);
-            System.out.println();
-        }
-        Canvas1 kanwa=new Canvas1(ilosc,koszty);
-        JFrame frame2=new JFrame("grafDescription");
-        frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame2.getContentPane().add(kanwa);
-        frame2.pack();
-        frame2.setVisible(true);
+        JPanel prawyPanel = new javax.swing.JPanel();
+        prawyPanel.setLayout(new BoxLayout(prawyPanel, BoxLayout.PAGE_AXIS));
+        JPanel Row7 = rozw.createTreeVisualization();
+        prawyPanel.add(Row7);
+        prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+        prawyPanel.add(wypiszTabelki());
+        prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+        JScrollPane prawyScrollPane = new JScrollPane(prawyPanel);
+        calyPanel.add(prawyScrollPane);
+    }
 
-    this.setVisible(false);
-    }
-else if(tryb==3)
+    /* Podobnie jak w trybie 2, ale dodane są jeszcze 2 guziczki, które pojawiają
+     się w zależności od tego, czy zmienna ktoraIteracja jest mniejsza od obliczonej
+     przez pierwsze wywołanie funkcji B&B zmiennej Iteracje. Wciśnięcie guziczków
+     modyfikuje zmienną któraIteracja i rysuje panel od nowa
+     !!! Przez to jest migotanie, z którym nie wiem co zrobić!
+     */
+    else if(tryb==3)
     {
+    JButton nastepny = new javax.swing.JButton();
+    nastepny.setText("Następny");
+    nastepny.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ktoraIteracja++;
+                Wynik.setVisible(false);
+                wypiszWynik();
+            }
+        });
+    JButton poprzedni = new javax.swing.JButton();
+    poprzedni.setText("Poprzedni");
+    poprzedni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ktoraIteracja--;
+                Wynik.setVisible(false);
+                wypiszWynik();
+            }
+        });
+    JPanel prawyPanel = new javax.swing.JPanel();
+    prawyPanel.setLayout(new BoxLayout(prawyPanel, BoxLayout.PAGE_AXIS));
+    JPanel przyciski = new javax.swing.JPanel();
+    przyciski.setLayout(new BoxLayout(przyciski, BoxLayout.LINE_AXIS));
+    if (ktoraIteracja>1)
+    {
+        przyciski.add(poprzedni);
+        przyciski.add(Box.createRigidArea(new Dimension(0,5)));
     }
+    if (ktoraIteracja<=iteracje)
+    {
+        przyciski.add(nastepny);
+    }
+
+    prawyPanel.add(przyciski);
+    prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+    rozw.branchAndBound2(ktoraIteracja);
+    if (ktoraIteracja>0)
+    {
+        JPanel Drzewko = rozw.createTreeVisualization();
+        prawyPanel.add(Drzewko);
+        prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+        prawyPanel.add(wypiszTabelki());
+    }
+    prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+    JScrollPane prawyScrollPane = new JScrollPane(prawyPanel);
+    calyPanel.add(prawyScrollPane);
+
+    }
+
+Wynik.add(calyPanel);
 Wynik.setVisible(true);
 Wynik.pack();
 
 }
 
+/*Tworzy i zwraca panel z wszystkimi tabelkami, które są aktualnie do wypisania
+ */
+private JPanel wypiszTabelki()
+{
+    JPanel tmpPanel = new javax.swing.JPanel();//Panel z wszystkimi tabelkami, który zostanie zwrócony
+    tmpPanel.setLayout(new GridLayout(0,3,5,5));
+    tmpPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+    /******Fragmenty kodu Doroty****/
+    Stack <Vertex>stos=new Stack<Vertex>();//Stos, na który będą wrzucane kolejne wierzchołki
+    Collection<Vertex> children = new ArrayList<Vertex>();//lista "dzieci" danego wierzchołka
+    Vertex root = rozw.treeVisualization.findRoot();//pierwszy wierzch.
+    stos.push(root);
+    int tableIndex = 1; // nr aktualnie wypisywanej tabelki
+    while(!stos.isEmpty())
+    {
+        root = stos.pop();
+        JPanel tabPanel = new javax.swing.JPanel();//Osobny panel dla każdej tabelki
+        tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.PAGE_AXIS));
+        tabPanel.add(new javax.swing.JLabel("Wierzchołek nr "+Integer.toString(root.getId())));
+        tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        tabPanel.add(wypiszKoszty(root.getDistancesSize(), root.getDistances()));
+        tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        tmpPanel.add(tabPanel);
+        tableIndex++;
+        children=rozw.treeVisualization.gv.getSuccessors(root);//wrzucenie na stos "dzieci" węzła
+        for(Iterator<Vertex>it = children.iterator();it.hasNext();)
+        {
+            Vertex naStos=it.next();
+            stos.push(naStos);
+        }
+
+    }
+    return tmpPanel;
+}
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Dalej;

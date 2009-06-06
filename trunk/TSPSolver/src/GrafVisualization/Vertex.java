@@ -14,6 +14,7 @@ import java.awt.geom.*;
 public class Vertex{
     int id;
     private String description;
+    private String description2;
     private Point2D placement;
     Integer [][]distances;
     int lowerBound;
@@ -56,9 +57,18 @@ public class Vertex{
     {
         description=a;
     }
+
+    public void setDescription2(String a)
+    {
+        description2=a;
+    }
     public String getDescription()
     {
         return description;
+    }
+    public String getDescription2()
+    {
+        return description2;
     }
     @Override
     public String toString()

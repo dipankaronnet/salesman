@@ -10,7 +10,7 @@ import javax.swing.table.*;
  *
  * @author Dorota
  */
-public class MyTableModel extends AbstractTableModel {
+/*public class MyTableModel extends AbstractTableModel {
 
     Integer distances[][];
     Integer data[][];
@@ -61,4 +61,4 @@ public class MyTableModel extends AbstractTableModel {
     }
 
 
-}
+}*/

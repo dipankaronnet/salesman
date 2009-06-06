@@ -55,7 +55,7 @@ public class InterfacePanel4 extends javax.swing.JFrame {
     int iteracje;
 
    /**Ktora iteracja jest aktualnie wykonywana w trzecim trybie*/
-    int ktoraIteracja = 1;
+    int ktoraIteracja = 0;
 
     /** Creates new form InterfacePanel4 */
     public InterfacePanel4(int t) {
@@ -176,7 +176,8 @@ public class InterfacePanel4 extends javax.swing.JFrame {
         {
         }
     rozw = new Solver(ilosc,koszty);
-    iteracje = rozw.branchAndBound();
+    iteracje = rozw.branchAndBound()+1;
+    rozw.completePath();
     wypiszWynik();
     this.setVisible(false);    
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -216,7 +217,12 @@ private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
                 else if ((i!=0)&&(j!=0))
                 {
                     if((i!=j)&&(koszty[i-1][j-1]<100000))
-                        NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                    {
+                        if (koszty[i-1][j-1]<0)
+                            NewColumn.add(new javax.swing.JLabel(" "));
+                        else
+                            NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                    }
                     else
                         NewColumn.add(new javax.swing.JLabel("inf"));
                     NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
@@ -269,6 +275,11 @@ private void wypiszWynik()
     Row4.setLayout(new BoxLayout(Row4, BoxLayout.LINE_AXIS));
     Row4.add(new javax.swing.JLabel(rozw.printAnswer2()));
     lewyPanel.add(Row4);
+
+    JPanel Row6 = new javax.swing.JPanel();
+    Row6.setLayout(new BoxLayout(Row6, BoxLayout.LINE_AXIS));
+    Row6.add(new javax.swing.JLabel(rozw.printAnswer3()));
+    lewyPanel.add(Row6);
 
     calyPanel.add(lewyPanel);
     calyPanel.add(Box.createHorizontalGlue());
@@ -326,21 +337,25 @@ private void wypiszWynik()
         przyciski.add(poprzedni);
         przyciski.add(Box.createRigidArea(new Dimension(0,5)));
     }
-    if (ktoraIteracja<iteracje)
+    if (ktoraIteracja<=iteracje)
     {
         przyciski.add(nastepny);
     }
+    
     prawyPanel.add(przyciski);
     prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
     rozw.branchAndBound2(ktoraIteracja);
-    
-    JPanel Drzewko = rozw.createTreeVisualization();
-    prawyPanel.add(Drzewko);
-    prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
-    prawyPanel.add(wypiszTabelki());
+    if (ktoraIteracja>0)
+    {
+        JPanel Drzewko = rozw.createTreeVisualization();
+        prawyPanel.add(Drzewko);
+        prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
+        prawyPanel.add(wypiszTabelki());
+    }
     prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
     JScrollPane prawyScrollPane = new JScrollPane(prawyPanel);
     calyPanel.add(prawyScrollPane);
+    
     }
 
 Wynik.add(calyPanel);
