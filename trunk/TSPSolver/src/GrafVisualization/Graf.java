@@ -20,7 +20,7 @@ import java.util.*;
 public class Graf
 {
     public DirectedSparseMultigraph<Vertex,Integer>gv;
-    public Layout<Vertex,Integer>layout;
+       public Layout<Vertex,Integer>layout; 
     public VisualizationViewer<Vertex,Integer>vv;
     private MyPickingGraphMousePlugin<Vertex,Integer> mouse;
     int vertexId=0;
