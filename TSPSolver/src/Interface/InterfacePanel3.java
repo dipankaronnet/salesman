@@ -486,6 +486,7 @@ Wynik.add(calyPanel);
 Wynik.setVisible(true);
 Wynik.pack();
 
+
 }
 
 /*Tworzy i zwraca panel z wszystkimi tabelkami, które są aktualnie do wypisania
