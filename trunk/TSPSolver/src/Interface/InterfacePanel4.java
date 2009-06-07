@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import java.io.*;
 
 /**
  *
@@ -140,6 +141,35 @@ public class InterfacePanel4 extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public void saveCosts()
+    {
+        try
+        {
+        FileWriter fw=new FileWriter("wynik.txt");
+        fw.write("Dla danej macierzy kosztów:\r\n\r\n");
+        for(int i=0; i<ilosc; ++i)
+        {
+            String linia=new String();
+            for(int j=0; j<ilosc; ++j)
+            {
+                if(koszty[i][j]!=100000000)
+                 linia+=koszty[i][j];
+                else
+                    linia+="inf";
+                linia+=" ";
+            }
+            linia+="\r\n";
+            fw.write(linia);
+
+        }
+        fw.write("\r\n");
+        fw.write("Najkrótszą ścieżką jest:\r\n\r\n");
+        String sciezka=rozw.printAnswer2();
+        fw.write(sciezka);
+        
+        fw.close();
+        }catch(IOException e){System.out.println("nie mozna dokonc zapisu");}
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int m1, m2, k;
         String linia;
@@ -178,6 +208,9 @@ public class InterfacePanel4 extends javax.swing.JFrame {
     rozw = new Solver(ilosc,koszty);
     iteracje = rozw.branchAndBound()+1;
     rozw.completePath();
+    rozw.completePath();
+    saveCosts();
+   // rozw.saveAnswer();
     wypiszWynik();
     this.setVisible(false);    
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -197,6 +230,16 @@ private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
 {
     JPanel tmpPanel = new javax.swing.JPanel();
     tmpPanel.setLayout(new BoxLayout(tmpPanel, BoxLayout.LINE_AXIS));
+
+        JButton nastepny = new javax.swing.JButton();
+    nastepny.setText("Następny");
+    nastepny.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            }
+        });
+       JPanel przyciski = new javax.swing.JPanel();
+       przyciski.setLayout(new BoxLayout(przyciski, BoxLayout.LINE_AXIS));
+       przyciski.add(nastepny);
 
         for (int i = 0; i<=ilosc; i++)
         {
