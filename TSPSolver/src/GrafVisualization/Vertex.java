@@ -19,7 +19,8 @@ public class Vertex{
     Integer [][]distances;
     int lowerBound;
     int distancesSize;
-    public Vertex(Integer[][]tab,int tabSize, int lb)
+    public int lewy;
+    public Vertex(Integer[][]tab,int tabSize, int lb, int l)
     {
         distancesSize=tabSize;
         distances=new Integer[tabSize][];
@@ -30,6 +31,7 @@ public class Vertex{
             for(int j=0; j<tabSize; ++j)
                 distances[i][j]=tab[i][j];
         lowerBound=lb;
+        lewy=l;
 
     }
     public Integer[][]getDistances()
