@@ -185,7 +185,7 @@ public class InterfacePanel4 extends javax.swing.JFrame {
                 koszty[i] = new Integer[ilosc];
              }
 
-             for(int j = 0; j < ilosc*(ilosc-1); j++)
+            /* for(int j = 0; j < ilosc*(ilosc-1); j++)
              {
                  linia = input.readLine();
                  String[] liczby = linia.split(" ");
@@ -195,6 +195,19 @@ public class InterfacePanel4 extends javax.swing.JFrame {
 
                  if (spr_miasta(m1, m2))
                     koszty[m1-1][m2-1] = k;
+
+             }*/
+             for(int j=0; j<ilosc; ++j)
+             {
+                 linia=input.readLine();
+                 String[]liczby=linia.split(" ");
+                 Integer wagi[]=new Integer[ilosc];
+                 for(int p=0; p<ilosc; ++p)
+                 {
+                     wagi[p]=Integer.parseInt(liczby[p]);
+                         if(spr_miasta(j+1,p+1))
+                     koszty[j][p]=wagi[p];
+                 }
 
              }
              for(int i=0; i<ilosc; ++i)
@@ -267,8 +280,11 @@ private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
                         else
                             NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
                     }
+                 /*if(koszty[])
+                          NewColumn.add(new javax.swing.JLabel(" "));*/
                     else
-                        NewColumn.add(new javax.swing.JLabel("inf"));
+                     NewColumn.add(new javax.swing.JLabel("inf"));
+
                     NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                 }
                 else
@@ -427,19 +443,43 @@ private JPanel wypiszTabelki()
         JPanel tabPanel = new javax.swing.JPanel();//Osobny panel dla każdej tabelki
         tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.PAGE_AXIS));
         tabPanel.add(new javax.swing.JLabel("Wierzchołek nr "+Integer.toString(root.getId())));
+        tabPanel.add(new javax.swing.JLabel("LB =  "+Integer.toString(root.getLowerBound())));
         tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
         tabPanel.add(wypiszKoszty(root.getDistancesSize(), root.getDistances()));
         tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
         tmpPanel.add(tabPanel);
         tableIndex++;
         children=rozw.treeVisualization.gv.getSuccessors(root);//wrzucenie na stos "dzieci" węzła
-        for(Iterator<Vertex>it = children.iterator();it.hasNext();)
+         Iterator<Vertex>it=children.iterator();
+        if(children.size()==2)
+        {
+            Vertex child1=it.next();
+            Vertex child2=it.next();
+            if(child1.lewy==1 && child2.lewy==0)
+            {
+                kolejka.add(child1);
+                kolejka.add(child2);
+            }
+            else
+            {
+                kolejka.add(child2);
+                kolejka.add(child1);
+            }
+        }
+        else if(children.size()==1)
+        {
+            Vertex child=it.next();
+            kolejka.add(child);
+        }
+        else;
+     }
+        /*  for(Iterator<Vertex>it = children.iterator();it.hasNext();)
         {
             Vertex doKolejki=it.next();
             kolejka.add(doKolejki);
-        }
+        }*/
 
-    }
+   
     return tmpPanel;
 }
 
