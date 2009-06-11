@@ -20,10 +20,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
+/*import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Stack;
+import java.util.Queue;*/
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -415,14 +416,14 @@ private JPanel wypiszTabelki()
     tmpPanel.setLayout(new GridLayout(0,3,5,5));
     tmpPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
     /******Fragmenty kodu Doroty****/
-    Stack <Vertex>stos=new Stack<Vertex>();//Stos, na który będą wrzucane kolejne wierzchołki
+    Queue <Vertex>kolejka=new LinkedList<Vertex>();//Stos, na który będą wrzucane kolejne wierzchołki
     Collection<Vertex> children = new ArrayList<Vertex>();//lista "dzieci" danego wierzchołka
     Vertex root = rozw.treeVisualization.findRoot();//pierwszy wierzch.
-    stos.push(root);
+    kolejka.add(root);
     int tableIndex = 1; // nr aktualnie wypisywanej tabelki
-    while(!stos.isEmpty())
+    while(!kolejka.isEmpty())
     {
-        root = stos.pop();
+        root = kolejka.poll();
         JPanel tabPanel = new javax.swing.JPanel();//Osobny panel dla każdej tabelki
         tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.PAGE_AXIS));
         tabPanel.add(new javax.swing.JLabel("Wierzchołek nr "+Integer.toString(root.getId())));
@@ -434,8 +435,8 @@ private JPanel wypiszTabelki()
         children=rozw.treeVisualization.gv.getSuccessors(root);//wrzucenie na stos "dzieci" węzła
         for(Iterator<Vertex>it = children.iterator();it.hasNext();)
         {
-            Vertex naStos=it.next();
-            stos.push(naStos);
+            Vertex doKolejki=it.next();
+            kolejka.add(doKolejki);
         }
 
     }
