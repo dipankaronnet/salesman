@@ -76,7 +76,7 @@ public class Graf
         {
             Vertex child1=its.next(); 
             Vertex child2=its.next();
-            if(child1.getLowerBound()>child2.getLowerBound())
+            if(child1.lewy==0 && child2.lewy==1)
             {
                 Vertex ble=childrenList.remove(0);
                 childrenList.add(0, child2);
@@ -156,7 +156,7 @@ public class Graf
         {
             Vertex child1=it.next();
             Vertex child2=it.next();
-            if(child1.getLowerBound()<child2.getLowerBound())
+            if(child1.lewy==1 && child2.lewy==0)
             {
                 kolejka.add(child1);
                 kolejka.add(child2);
