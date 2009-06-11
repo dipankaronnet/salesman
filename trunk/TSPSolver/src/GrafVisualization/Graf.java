@@ -55,8 +55,9 @@ public class Graf
      * @param parentPlacement
      * @param wsp
      */
-    private void setVertexPlacement(Vertex parent, Point2D parentPlacement, double wsp)
+    private void setVertexPlacement(Vertex parent, Point2D parentPlacement, double wsp)//, int numer)
     {
+       // System.out.println(vertexId);
         Collection<Vertex>children=new ArrayList<Vertex>();
         ArrayList<Vertex>childrenList=new ArrayList<Vertex>();
 
@@ -73,7 +74,7 @@ public class Graf
         Iterator <Vertex>its=childrenList.iterator();
         if(its.hasNext())
         {
-            Vertex child1=its.next();
+            Vertex child1=its.next(); 
             Vertex child2=its.next();
             if(child1.getLowerBound()>child2.getLowerBound())
             {
@@ -94,23 +95,32 @@ public class Graf
                 childrenNotLeaf++;
             }
         }
-        
+      /*  String olddesc=parent.getDescription();
+        String olddesc2=parent.getDescription2();
+        String newdesc=Integer.toString(numer)+". "+olddesc+"\r\n "+olddesc2;
+        parent.setDescription(newdesc);
+        vertexId++;*/
         for(Iterator<Vertex>it=childrenList.iterator();it.hasNext();)
         {
             Vertex child=it.next();
             y=parentPlacement.getY()+50;
+  
             if(childrenCounter%2==0)
-                x=parentPlacement.getX()-wsp*200;
+                x=parentPlacement.getX()-wsp*150;
             else
-                x=parentPlacement.getX()+wsp*200;
+                x=parentPlacement.getX()+wsp*150;
+
+
             Point2D placement=new Point2D.Double(x, y);
             layout.setLocation(child, placement);
 
             if(childrenNotLeaf>1)
-                setVertexPlacement(child,placement,0.5*wsp);
-            else
-                setVertexPlacement(child,placement,wsp);
+                setVertexPlacement(child,placement,0.5*wsp);//,vertexId);
+            else if(childrenNotLeaf==1)
+                setVertexPlacement(child,placement,wsp);//,vertexId);
+            else;
             childrenCounter++;
+         //   vertexId++;
         }
 
     }
@@ -121,22 +131,58 @@ public class Graf
      */
     public void setId(Vertex root)
     {
-        root.setId(vertexId);
+      /*  root.setId(vertexId);
         ++vertexId;
         String olddesc=root.getDescription();
         String olddesc2=root.getDescription2();
-        String newdesc=Integer.toString(root.getId())+". "+olddesc+"\n "+olddesc2;
-        root.setDescription(newdesc);
+        String newdesc=Integer.toString(root.getId())+". "+olddesc+"\r\n "+olddesc2;
+        root.setDescription(newdesc);*/
         Collection<Vertex>children=new ArrayList<Vertex>();
-        children=gv.getSuccessors(root);
-        int childCounter=0;
-        for(Iterator<Vertex>it=children.iterator();it.hasNext();)
+         Queue <Vertex>kolejka=new LinkedList<Vertex>();
+         kolejka.add(root);
+         while(kolejka.isEmpty()==false)
+         {
+          
+        Vertex parent=kolejka.poll();
+       parent.setId(vertexId);
+        ++vertexId;
+        String olddesc=parent.getDescription();
+        String olddesc2=parent.getDescription2();
+        String newdesc=Integer.toString(parent.getId())+". "+olddesc+"\n "+olddesc2;
+        parent.setDescription(newdesc);
+        children=gv.getSuccessors(parent);
+        Iterator<Vertex>it=children.iterator();
+        if(children.size()==2)
+        {
+            Vertex child1=it.next();
+            Vertex child2=it.next();
+            if(child1.getLowerBound()<child2.getLowerBound())
+            {
+                kolejka.add(child1);
+                kolejka.add(child2);
+            }
+            else
+            {
+                kolejka.add(child2);
+                kolejka.add(child1);
+            }
+        }
+        else if(children.size()==1)
         {
             Vertex child=it.next();
+            kolejka.add(child);        
+        }
+        else;
+         }
+
+     /*   for(Iterator<Vertex>it=children.iterator();it.hasNext();)
+        {
+            Vertex child=it.next();
+            
             setId(child);
             ++childCounter;
 
-        }
+        }*/
 
 
 
@@ -153,6 +199,7 @@ public class Graf
      */
     public VisualizationViewer drawGraf()
     {
+        vertexId=0;
         layout= new CircleLayout(gv);
         vv = new VisualizationViewer<Vertex,Integer>(layout);
         vv.setPreferredSize(new Dimension(800,500));
@@ -162,9 +209,8 @@ public class Graf
         Point2D rootPlacement=new Point2D.Double(500.0,50.0);
         mouse=new MyPickingGraphMousePlugin<Vertex,Integer>();
         layout.setLocation(root, rootPlacement);
-        setVertexPlacement(root,rootPlacement,1);
-        vertexId=0;
-        setId(root);
+        setVertexPlacement(root,rootPlacement,2);//,vertexId);
+       setId(root);
         vertexCounter=vertexId;
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         PluggableGraphMouse gm=new PluggableGraphMouse();
