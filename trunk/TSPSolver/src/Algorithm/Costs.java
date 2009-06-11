@@ -28,6 +28,7 @@ public class Costs {
     // #[regen=yes,id=DCE.C3C6D90E-B87F-7E39-7894-2F867EA58A96]
     // </editor-fold> 
     private int lowerBound;
+    public int lewy;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.9794A3B4-71FF-E157-7A13-C7773A3FFE63]
