@@ -112,8 +112,10 @@ public class Solver {
                 // podział i reduckaj dzieci
                 leftChild = new Costs(root.getSize()-1,root,branchEdge,true);
                 leftChild.setLowerBoundAndReduce(root.getLowerBound());
+                leftChild.lewy=1;
                 rightChild=new Costs(root.getSize(),root,branchEdge,false);
                 rightChild.setLowerBoundAndReduce(root.getLowerBound());
+                rightChild.lewy=0;
                 boolean ok;
                 // dodanie dzieci do drzewa
                 ok=tree.addChild(edgeCounter,root, leftChild);
@@ -178,8 +180,10 @@ public class Solver {
                     // podział i reduckaj dzieci
                     leftChild = new Costs(root.getSize()-1,root,branchEdge,true);
                     leftChild.setLowerBoundAndReduce(root.getLowerBound());
+                    leftChild.lewy=1;
                     rightChild=new Costs(root.getSize(),root,branchEdge,false);
                     rightChild.setLowerBoundAndReduce(root.getLowerBound());
+                    rightChild.lewy=0;
                     boolean ok;
                     // dodanie dzieci do drzewa
                     ok=tree.addChild(edgeCounter,root, leftChild);
@@ -188,6 +192,7 @@ public class Solver {
                     edgeCounter++;
                     // jako nowego roota wybieramy lewe dziecko
                     root=leftChild;
+
                     --size;
                     
                } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
@@ -246,7 +251,8 @@ public class Solver {
         for(Iterator<Costs> it=children.iterator(); it.hasNext();)
         {
             Costs child=it.next();
-            Vertex a=new Vertex(child.getDistances(),child.getArraySize(),child.getLowerBound());
+
+            Vertex a=new Vertex(child.getDistances(),child.getArraySize(),child.getLowerBound(),child.lewy);
             child.setDescription();
             child.setDescription2();
             a.setDescription(child.getDescription());
@@ -267,7 +273,7 @@ public class Solver {
         treeVisualization=new Graf();
         treeVisualization.init();
         Costs r=(Costs)tree.getRoot();
-        Vertex a=new Vertex(r.getDistances(),r.getArraySize(),r.getLowerBound());
+        Vertex a=new Vertex(r.getDistances(),r.getArraySize(),r.getLowerBound(),r.lewy);
         r.setDescription();
         r.setDescription2();
         String desc=r.getDescription();
