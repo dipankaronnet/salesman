@@ -52,12 +52,15 @@ public class InterfacePanel4 extends javax.swing.JFrame {
 
     /**Tu będzie rozwiązanie*/
     Solver rozw;
+    String wypis1;
+    String wypis2;
 
     /**Ile iteracji - liczy pierwsze wywołanie B&B**/
     int iteracje;
 
    /**Ktora iteracja jest aktualnie wykonywana w trzecim trybie*/
     int ktoraIteracja = 0;
+
 
     /** Creates new form InterfacePanel4 */
     public InterfacePanel4(int t) {
@@ -221,8 +224,11 @@ public class InterfacePanel4 extends javax.swing.JFrame {
         }
         
     rozw = new Solver(ilosc,koszty);
+    
     iteracje = rozw.branchAndBound()+1;
-    rozw.completePath();
+    wypis1=rozw.printAnswer2();
+    wypis2=rozw.printAnswer3();
+   // rozw.completePath();
     saveCosts();
     wypiszWynik();
     this.setVisible(false);    
@@ -300,6 +306,7 @@ private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
     return tmpPanel;
 }
 
+
 /**Tworzy nowe okienko, w którym wypisuje wynik, w drugim trybie dodatkowo
  * rysuje drzewko i tabelki, a w trzecim pozwala krok po kroku przejrzeć
  * rozwiązanie. Będzie też opcja zapisu wyniku do pliku, zapisu rysunku i ew.
@@ -307,7 +314,7 @@ private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
  */
 private void wypiszWynik()
 {
-    final JFrame Wynik = new javax.swing.JFrame();//Otwarcie nowego okienka
+       final JFrame Wynik = new javax.swing.JFrame();//Otwarcie nowego okienka
     Wynik.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     JPanel calyPanel = new javax.swing.JPanel();
     calyPanel.setLayout(new BoxLayout(calyPanel, BoxLayout.LINE_AXIS));
@@ -332,12 +339,12 @@ private void wypiszWynik()
 
     JPanel Row4 = new javax.swing.JPanel();
     Row4.setLayout(new BoxLayout(Row4, BoxLayout.LINE_AXIS));
-    Row4.add(new javax.swing.JLabel(rozw.printAnswer2()));
+    Row4.add(new javax.swing.JLabel(wypis1));
     lewyPanel.add(Row4);
 
     JPanel Row6 = new javax.swing.JPanel();
     Row6.setLayout(new BoxLayout(Row6, BoxLayout.LINE_AXIS));
-    Row6.add(new javax.swing.JLabel(rozw.printAnswer3()));
+    Row6.add(new javax.swing.JLabel(wypis2));
     lewyPanel.add(Row6);
 
     calyPanel.add(lewyPanel);
@@ -369,11 +376,13 @@ private void wypiszWynik()
      */
     else if(tryb==3)
     {
+        rozw=new Solver(ilosc,koszty);
     JButton nastepny = new javax.swing.JButton();
     nastepny.setText("Następny");
     nastepny.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ktoraIteracja++;
+                    rozw.branchAndBound2(ktoraIteracja);
                 Wynik.setVisible(false);
                 wypiszWynik();
             }
@@ -383,6 +392,7 @@ private void wypiszWynik()
     poprzedni.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ktoraIteracja--;
+                    rozw.branchAndBound2(ktoraIteracja);
                 Wynik.setVisible(false);
                 wypiszWynik();
             }
@@ -404,9 +414,9 @@ private void wypiszWynik()
     prawyPanel.add(przyciski);
     prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
     rozw.branchAndBound2(ktoraIteracja);
-    if(ktoraIteracja>iteracje)
+    if(ktoraIteracja>=iteracje)
     {
-        rozw.completePath();
+        //rozw.completePath();
     }
     if (ktoraIteracja>0)
     {  
