@@ -219,12 +219,11 @@ public class InterfacePanel4 extends javax.swing.JFrame {
     catch (IOException ex)
         {
         }
+        
     rozw = new Solver(ilosc,koszty);
     iteracje = rozw.branchAndBound()+1;
     rozw.completePath();
-    rozw.completePath();
     saveCosts();
-   // rozw.saveAnswer();
     wypiszWynik();
     this.setVisible(false);    
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -405,8 +404,12 @@ private void wypiszWynik()
     prawyPanel.add(przyciski);
     prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
     rozw.branchAndBound2(ktoraIteracja);
-    if (ktoraIteracja>0)
+    if(ktoraIteracja>iteracje)
     {
+        rozw.completePath();
+    }
+    if (ktoraIteracja>0)
+    {  
         JPanel Drzewko = rozw.createTreeVisualization();
         prawyPanel.add(Drzewko);
         prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
@@ -415,7 +418,7 @@ private void wypiszWynik()
     prawyPanel.add(Box.createRigidArea(new Dimension(5,0)));
     JScrollPane prawyScrollPane = new JScrollPane(prawyPanel);
     calyPanel.add(prawyScrollPane);
-    
+
     }
 
 Wynik.add(calyPanel);
