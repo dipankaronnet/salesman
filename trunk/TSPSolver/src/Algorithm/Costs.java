@@ -462,6 +462,8 @@ public int findIndexInPath(Edge toPut)
     for(Iterator<Edge>it=path.iterator();it.hasNext();)
     {
         Edge e=it.next();
+       // System.out.println(toPut.getFrom());
+        //  System.out.println(toPut.getTo());
         if(e.getTo()==toPut.getFrom())
         {
             indexToReturn = index;
