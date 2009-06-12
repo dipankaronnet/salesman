@@ -458,12 +458,25 @@ public int findIndexInPath(Edge toPut)
     int index=1;
     int indexToReturn=path.size();
     boolean found=false;
+    System. out.println(path.toString());
+    System.out.print(toPut.getFrom()+" ");
+        System.out.print(toPut.getTo());
+      System.out.println();
+    for(Iterator<Edge>it=path.iterator(); it.hasNext();)
+    {
+       Edge e=it.next();
+       if(e==toPut)
+       {
+           return -1;
+       }
+    }
 
     for(Iterator<Edge>it=path.iterator();it.hasNext();)
     {
         Edge e=it.next();
-       // System.out.println(toPut.getFrom());
-        //  System.out.println(toPut.getTo());
+        System.out.print(toPut.getFrom()+" ");
+         System.out.print(toPut.getTo());
+         System.out.println();
         if(e.getTo()==toPut.getFrom())
         {
             indexToReturn = index;
@@ -504,5 +517,9 @@ public boolean pathOk()
     }
     return true;
 
+}
+public  void zerujSciezke()
+{
+    path.clear();
 }
 }
