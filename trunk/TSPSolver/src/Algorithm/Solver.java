@@ -39,7 +39,7 @@ public class Solver {
     private Costs rightChild;
     private DirectedGraph<Costs,Integer>g; // dane zebrane w graf
     public DelegateTree tree; // do grafu podpiete drzewo  zeby graf sie stał drzewem były dzieci i rodzice itd
-    private Costs answer;
+    public Costs answer;
 
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.E00E93BC-F2F5-204E-DAF9-148AB083C5B1]
@@ -100,7 +100,7 @@ public class Solver {
         // w pechowej sytuacji mozemy tak do  niesk dlatego konczymy po 5 iteracjach
         // 1 iteracja algorytmu ro redukcja roota kolejne podziały az dochodzimy do momentu
         // gdy lewa podmacierz marozmiar 2 i konczymy algo
-        while(counter<5 && root.getLowerBound()<min)
+        while(counter<15 && root.getLowerBound()<min)
         {
             size=root.getSize();
             while(size>2)  // 1 iteracja algo do moemntu gdy redukowana macierz ma rozmiar 2
@@ -125,11 +125,13 @@ public class Solver {
                 // jako nowego roota wybieramy lewe dziecko
                 root=leftChild;
                 --size;
-            } // o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
+            }// o przejsciu 1 iteracji rootem jest skrajnie lewe dziecko
+        
             if(counter==0) // pierwsza iteracja
                 answer=root;
             if(root.getLowerBound()<answer.getLowerBound()) // kolejne iteracje gdy daja lepsze  rozw nadpisujemy
                 answer=root;
+                comPath();
             min=root.getLowerBound();
             newMinLeaf=false;
             chooseNext((Costs)tree.getRoot(),root.getLowerBound()); // jezeli znajdzie sie jakies prawe dziecko
@@ -140,6 +142,7 @@ public class Solver {
                 break;
             ++counter;
         }
+      comPath();
         return ileKrokow;
     }
        
@@ -167,7 +170,7 @@ public class Solver {
             // w pechowej sytuacji mozemy tak do  niesk dlatego konczymy po 5 iteracjach
             // 1 iteracja algorytmu ro redukcja roota kolejne podziały az dochodzimy do momentu
             // gdy lewa podmacierz marozmiar 2 i konczymy algo
-            while(counter<5 && root.getLowerBound()<min)
+            while(counter<15 && root.getLowerBound()<min)
             {
                 size=root.getSize();
                 while(size>2 && iteracje<ileIteracji)  // 1 iteracja algo do moemntu gdy redukowana macierz ma rozmiar 2
@@ -200,6 +203,10 @@ public class Solver {
                  answer=root;
              if(root.getLowerBound()<answer.getLowerBound()) // kolejne iteracje gdy daja lepsze  rozw nadpisujemy
                  answer=root;
+                             if(answer.getSize()<=2 && iteracje<ileIteracji)
+                {
+                        comPath();
+                }
              min=root.getLowerBound();
              newMinLeaf=false;
              chooseNext((Costs)tree.getRoot(),root.getLowerBound()); // jezeli znajdzie sie jakies prawe dziecko
@@ -291,8 +298,17 @@ public class Solver {
         /*************************/
 
     }
-    public void completePath()
+    public void comPath()
     {
+       /* for(int i=0; i<answer.getArraySize();++i)
+        {
+            for(int j=0;j<answer.getArraySize(); ++j)
+            {
+                System.out.print(answer.getDistances()[i][j]+" ");
+            }
+            System.out.println();
+        }*/
+        System.out.println(answer.getArraySize());
         Edge edges[]=new Edge[3];
         int index=0;
         for(int i=0; i<answer.getArraySize();++i)
@@ -314,10 +330,13 @@ public class Solver {
                 {
                 Edge toTake1=edges[i];
                 Edge toTake2=edges[j];
+
                 index1=answer.findIndexInPath(toTake1);
-                answer.getPath().add(index1, toTake1);
+              //  if(index1!=-1)
+                  answer.getPath().add(index1, toTake1);
                 index2=answer.findIndexInPath(toTake2);
-                answer.getPath().add(index2, toTake2);
+              // if(index2!=-1)
+                    answer.getPath().add(index2, toTake2);
                 if(answer.pathOk()==true)
                 {
                     return;
