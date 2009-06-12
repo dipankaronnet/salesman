@@ -317,7 +317,7 @@ public class InterfacePanel3 extends javax.swing.JFrame {
     private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
     rozw = new Solver(ilosc,koszty);
     iteracje = rozw.branchAndBound()+1;
-    rozw.completePath();
+   // rozw.completePath();
     saveCosts();
     wypiszWynik();
     this.setVisible(false);
