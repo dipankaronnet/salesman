@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Stack;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import java.io.*;
 
 /**
  *
@@ -282,13 +283,42 @@ public class InterfacePanel3 extends javax.swing.JFrame {
 
                                      
 
+   public void saveCosts()
+    {
+        try
+        {
+        FileWriter fw=new FileWriter("wynik.txt");
+        fw.write("Dla danej macierzy kosztów:\r\n\r\n");
+        for(int i=0; i<ilosc; ++i)
+        {
+            String linia=new String();
+            for(int j=0; j<ilosc; ++j)
+            {
+                if(koszty[i][j]!=100000000)
+                 linia+=koszty[i][j];
+                else
+                    linia+="inf";
+                linia+=" ";
+            }
+            linia+="\r\n";
+            fw.write(linia);
 
+        }
+        fw.write("\r\n");
+        fw.write("Najkrótszą ścieżką jest:\r\n\r\n");
+        String sciezka=rozw.printAnswer2();
+        fw.write(sciezka);
+
+        fw.close();
+        }catch(IOException e){System.out.println("nie mozna dokonc zapisu");}
+    }
 /** Wypisuje rozwiązanie w zależności od wybranego trybu
  */
     private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
     rozw = new Solver(ilosc,koszty);
     iteracje = rozw.branchAndBound()+1;
     rozw.completePath();
+    saveCosts();
     wypiszWynik();
     this.setVisible(false);
 }//GEN-LAST:event_DalejActionPerformed
