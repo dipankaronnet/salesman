@@ -148,7 +148,7 @@ public class Solver {
        
     /**Druga wersja na potrzebę 3 trybu wypisywania wyniku
      * */
-    public void branchAndBound2 (int ileIteracji)
+    public void branchAndBound2 (int ileIteracji,int max)
        {
            g=null;
            tree=null;
@@ -173,6 +173,7 @@ public class Solver {
             while(counter<15 && root.getLowerBound()<min)
             {
                 size=root.getSize();
+
                 while(size>2 && iteracje<ileIteracji)  // 1 iteracja algo do moemntu gdy redukowana macierz ma rozmiar 2
                 {
                     iteracje++;

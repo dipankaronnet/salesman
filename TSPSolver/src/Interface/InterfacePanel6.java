@@ -51,6 +51,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
 
     /**Ktora iteracja jest aktualnie wykonywana w trzecim trybie*/
     int ktoraIteracja = 1;
+    Integer lb;
 
     /**Panele i guziki dostępne dla wszystkich metod w tej klasie*/
     JPanel calyPanel = new javax.swing.JPanel();
@@ -84,6 +85,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
 		wypis1=rozw.printAnswer2(); //D
 		wypis2=rozw.printAnswer3(); //D
 	//	saveCosts();				//D
+       lb=rozw.answer.getLowerBound();
         ustawParametry();
 
         wypiszWynik();
@@ -98,7 +100,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 ktoraIteracja++;
-				rozw.branchAndBound2(ktoraIteracja); // D
+				rozw.branchAndBound2(ktoraIteracja,iteracje); // D
                 calyPanel.remove(2);
                 calyPanel.add(new JScrollPane(nowyPrawyPanel()));
                 calyPanel.repaint();
@@ -112,7 +114,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 ktoraIteracja--;
-				 rozw.branchAndBound2(ktoraIteracja); // D
+				 rozw.branchAndBound2(ktoraIteracja,iteracje); // D
                 calyPanel.remove(2);
                 calyPanel.add(new JScrollPane(nowyPrawyPanel()));
                 calyPanel.repaint();
@@ -152,7 +154,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
             String linia=new String();
             for(int j=0; j<ilosc; ++j)
             {
-                if(koszty[i][j]!=100000000)
+                if(i!=j)
                  linia+=koszty[i][j];
                 else
                     linia+="inf";
@@ -203,7 +205,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
                                 NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
                         }
                         else
-                            NewColumn.add(new javax.swing.JLabel("inf"));
+                            NewColumn.add(new javax.swing.JLabel("oo"));
                         NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                     }
                     else
@@ -252,13 +254,19 @@ public class InterfacePanel6 extends javax.swing.JFrame
         Row4.add(new javax.swing.JLabel(wypis1));
         lewyPanel.add(Row4);
 
-        JPanel Row6 = new javax.swing.JPanel();
+       /* JPanel Row6 = new javax.swing.JPanel();
         Row6.setLayout(new BoxLayout(Row6, BoxLayout.LINE_AXIS));
-        Row6.add(new javax.swing.JLabel(wypis2));
-        lewyPanel.add(Row6);
+        Row6.add(new javax.swing.JLabel());
+        lewyPanel.add(Row6);*/
 
         JPanel Row7 = new javax.swing.JPanel();
         Row7.setLayout(new BoxLayout(Row7, BoxLayout.LINE_AXIS));
+        Row7.add(new javax.swing.JLabel());
+        lewyPanel.add(Row7);
+        lewyPanel.add(Box.createRigidArea(new Dimension(0,10)));
+
+        JPanel Row8 = new javax.swing.JPanel();
+        Row8.setLayout(new BoxLayout(Row8, BoxLayout.LINE_AXIS));
         JButton zapisz = new javax.swing.JButton("Zapisz");
         zapisz.addActionListener(new java.awt.event.ActionListener()
         {
@@ -421,14 +429,14 @@ public class InterfacePanel6 extends javax.swing.JFrame
             przyciski.add(Box.createRigidArea(new Dimension(0,5)));
         }
 
-        if (ktoraIteracja<=iteracje)
+        if (ktoraIteracja<iteracje) // <= -> <
         {
             przyciski.add(nastepny);
         }
 
         tmpPanel.add(przyciski);
         tmpPanel.add(Box.createRigidArea(new Dimension(5,0)));
-        rozw.branchAndBound2(ktoraIteracja);
+        rozw.branchAndBound2(ktoraIteracja,iteracje);
         if (ktoraIteracja>0)
         {
             tmpPanel.add(rozw.createTreeVisualization());
