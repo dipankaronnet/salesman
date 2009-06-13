@@ -164,7 +164,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
         }
         fw.write("\r\n");
         fw.write("Najkrótszą ścieżką jest:\r\n\r\n");
-        String sciezka=rozw.printAnswer2();
+        String sciezka=wypis1+wypis2;
         fw.write(sciezka);
 
         fw.close();
