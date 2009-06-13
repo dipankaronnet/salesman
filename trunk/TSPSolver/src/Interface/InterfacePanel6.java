@@ -83,7 +83,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
        // rozw.completePath(); //D
 		wypis1=rozw.printAnswer2(); //D
 		wypis2=rozw.printAnswer3(); //D
-		saveCosts();				//D
+	//	saveCosts();				//D
         ustawParametry();
 
         wypiszWynik();
@@ -98,7 +98,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 ktoraIteracja++;
-				 rozw.branchAndBound2(ktoraIteracja); // D
+				rozw.branchAndBound2(ktoraIteracja); // D
                 calyPanel.remove(2);
                 calyPanel.add(new JScrollPane(nowyPrawyPanel()));
                 calyPanel.repaint();

@@ -13,7 +13,8 @@ public class Costs {
     // </editor-fold>
     /** tabela kosztów*/
     private Integer[][] distances;
-
+    public Integer[]rzedy;
+    public Integer[]kolumny;
     // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
     // #[regen=yes,id=DCE.F91F661B-AEC4-C8C7-027A-C4ED2B889438]
     // </editor-fold>

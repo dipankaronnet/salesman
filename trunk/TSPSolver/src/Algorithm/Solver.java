@@ -159,7 +159,7 @@ public class Solver {
            int edgeCounter=0;
            root =(Costs)tree.getRoot();
            int size=root.getSize();
-           root.setLowerBoundAndReduce(0); //redukujemy routa jako lb jego parenta 0
+           root.setLowerBoundAndReduce(root.getLowerBound()); //redukujemy routa jako lb jego parenta 0
            int min=INF;
            int counter=0;
            int iteracje=0;
@@ -177,7 +177,7 @@ public class Solver {
                 {
                     iteracje++;
                     ++ileKrokow;
-                    root.setLowerBoundAndReduce(root.getLowerBound()); // redukcja i obliczenie lb
+                   root.setLowerBoundAndReduce(root.getLowerBound()); // redukcja i obliczenie lb
                     root.setEdgeToBranch(); // wyznaczenie luku wzgledem ktorego dzielimy
                     Edge branchEdge=root.getEdgeToBranch();
                     // podział i reduckaj dzieci
@@ -212,7 +212,10 @@ public class Solver {
              chooseNext((Costs)tree.getRoot(),root.getLowerBound()); // jezeli znajdzie sie jakies prawe dziecko
              // praweczyli nie ma calej sciezki ale ma lb mnijesze czyli daje nadzieje w chooseNext ustawia new Min leaf na true
              if(newMinLeaf==true)
+             {
                  root=minLeaf; // robmy nowe roota i od niego znowu algo
+
+             }
              else
                   break;
              ++counter;
@@ -300,6 +303,7 @@ public class Solver {
     }
     public void comPath()
     {
+        System.out.println("ble");
        /* for(int i=0; i<answer.getArraySize();++i)
         {
             for(int j=0;j<answer.getArraySize(); ++j)
