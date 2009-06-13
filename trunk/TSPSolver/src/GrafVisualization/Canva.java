@@ -31,7 +31,7 @@ public class Canva extends Canvas
        // a.branchAndBound();
        // a.completePath();
        // a.printAnswer();
-        a.branchAndBound2(4); // w parametrze podajemy ile chcemy krokow - ktory krok chcemy
+       // a.branchAndBound2(4); // w parametrze podajemy ile chcemy krokow - ktory krok chcemy
         a.createTreeVisualization();
     }
     @Override

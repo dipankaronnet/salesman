@@ -1,6 +1,6 @@
 /*
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -172,26 +172,26 @@
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-}//GEN-LAST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+}                                        
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                        
 
-    private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
+    private void DalejActionPerformed(java.awt.event.ActionEvent evt) {                                      
 
-}//GEN-LAST:event_DalejActionPerformed
+}                                     
 
-    private void podgladActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_podgladActionPerformed
+    private void podgladActionPerformed(java.awt.event.ActionEvent evt) {                                        
 
 
-}//GEN-LAST:event_podgladActionPerformed
+}                                       
 
   
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton Dalej;
     private javax.swing.JButton dodaj;
     private javax.swing.JButton jButton1;
@@ -209,7 +209,7 @@
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JButton podglad;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
 }*/
 
@@ -557,7 +557,7 @@ private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
                             NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
                     }
                     else
-                        NewColumn.add(new javax.swing.JLabel("inf"));
+                        NewColumn.add(new javax.swing.JLabel("oo"));
                     NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                 }
                 else
