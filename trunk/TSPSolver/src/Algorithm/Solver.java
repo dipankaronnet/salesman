@@ -308,9 +308,11 @@ public class Solver {
             }
             System.out.println();
         }*/
-        System.out.println(answer.getArraySize());
-        Edge edges[]=new Edge[3];
+      //  System.out.println(answer.getArraySize());
+        Edge edges[]=new Edge[4];
         int index=0;
+
+
         for(int i=0; i<answer.getArraySize();++i)
             for(int j=0; j<answer.getArraySize();++j)
             {
@@ -322,9 +324,14 @@ public class Solver {
                 }
             }
 
+
         int index1,index2;
-        for(int i=0; i<3; ++i)
-            for(int j=0; j<3; ++j)
+
+
+    //    answer.printPath();
+        
+        for(int i=0; i<index; ++i)
+            for(int j=0; j<index; ++j)
             {
                 if(i!=j)
                 {
