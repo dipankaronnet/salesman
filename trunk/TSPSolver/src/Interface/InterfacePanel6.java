@@ -259,11 +259,19 @@ public class InterfacePanel6 extends javax.swing.JFrame
         Row4.setLayout(new BoxLayout(Row4, BoxLayout.LINE_AXIS));
         Row4.add(new javax.swing.JLabel(wypis1));
         lewyPanel.add(Row4);
+        lewyPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
-       /* JPanel Row6 = new javax.swing.JPanel();
+        JPanel Row6 = new javax.swing.JPanel();
         Row6.setLayout(new BoxLayout(Row6, BoxLayout.LINE_AXIS));
-        Row6.add(new javax.swing.JLabel());
-        lewyPanel.add(Row6);*/
+        Row6.add(new javax.swing.JLabel(wypis2));
+        lewyPanel.add(Row6);
+        lewyPanel.add(Box.createRigidArea(new Dimension(0,10)));
+
+        JPanel Row9 = new javax.swing.JPanel();
+        Row9.setLayout(new BoxLayout(Row9, BoxLayout.LINE_AXIS));
+        Row9.add(new javax.swing.JLabel("Koszt: "+String.valueOf(lb)));
+        lewyPanel.add(Row9);
+        lewyPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
         JPanel Row7 = new javax.swing.JPanel();
         Row7.setLayout(new BoxLayout(Row7, BoxLayout.LINE_AXIS));

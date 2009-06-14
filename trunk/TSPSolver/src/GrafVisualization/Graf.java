@@ -148,7 +148,7 @@ public class Graf
         ++vertexId;
         String olddesc=parent.getDescription();
         String olddesc2=parent.getDescription2();
-        String newdesc=Integer.toString(parent.getId())+". "+olddesc+"\n "+olddesc2;
+        String newdesc=Integer.toString(parent.getId())+". "+olddesc+"\r\n"+olddesc2;
         parent.setDescription(newdesc);
         children=gv.getSuccessors(parent);
         Iterator<Vertex>it=children.iterator();

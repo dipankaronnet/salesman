@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import java.io.*;
 // <editor-fold defaultstate="collapsed" desc=" UML Marker "> 
 // #[regen=yes,id=DCE.7B791AD3-C503-B12A-7E83-B53FCB270ABD]
 // </editor-fold>
@@ -179,6 +178,7 @@ public class Solver {
                     iteracje++;
                     ++ileKrokow;
                    root.setLowerBoundAndReduce(root.getLowerBound()); // redukcja i obliczenie lb
+
                     root.setEdgeToBranch(); // wyznaczenie luku wzgledem ktorego dzielimy
                     Edge branchEdge=root.getEdgeToBranch();
                     // podział i reduckaj dzieci
@@ -204,7 +204,7 @@ public class Solver {
                  answer=root;
              if(root.getLowerBound()<answer.getLowerBound()) // kolejne iteracje gdy daja lepsze  rozw nadpisujemy
                  answer=root;
-                             if(answer.getSize()<=2 && iteracje<ileIteracji)
+             if(answer.getSize()<=2 && iteracje<ileIteracji)
                 {
                         comPath();
                 }
@@ -382,6 +382,16 @@ public class Solver {
     {
 
         return ileKrokow;
+    }
+
+    /**Zwraca tablice kosztow roota*/
+    public Integer[][] getDistances () {
+        return answer.getDistances();
+    }
+
+    /**Zwraca rozmiar roota*/
+    public int getSize () {
+        return answer.getArraySize();
     }
 
 }
