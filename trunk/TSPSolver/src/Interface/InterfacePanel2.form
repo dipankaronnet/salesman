@@ -32,7 +32,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" max="32767" attributes="0"/>
+              <Component id="jPanel1" pref="411" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -41,7 +41,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" pref="344" max="32767" attributes="0"/>
+              <Component id="jPanel1" pref="348" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -57,6 +57,9 @@
             </TitledBorder>
           </Border>
         </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[400, 350]"/>
+        </Property>
       </Properties>
 
       <Layout>
@@ -67,7 +70,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="27" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jButton1" linkSize="1" min="-2" max="-2" attributes="0"/>
@@ -133,7 +136,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;Rozwi&#x105;zanie problemu komiwoje&#x17c;era mo&#x17c;na &lt;br&gt;&#xa;obejrze&#x107; w trzech wersjach. Pierwsza z nich podaje &lt;br&gt;&#xa;samo rozwi&#x105;zanie. Druga rysuje drzewko dla rozwi&#x105;zania&lt;br&gt;&#xa;Trzecia przedstawia rozwi&#x105;zanie krok po kroku.&lt;br&gt;&#xa;Ko&#x17c;ystanie z programu rozpocznij &lt;br&gt;&#xa;od wyboru trybu i podania danych wej&#x15b;ciowych. &lt;br&gt;&#xa;Dane wej&#x15b;ciowe mo&#x17c;esz wpisa&#x107; r&#x119;cznie lub wczyta&#x107; z pliku.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Rozwi&#x105;zanie problemu komiwoje&#x17c;era mo&#x17c;na &lt;br&gt; obejrze&#x107; w trzech wersjach. Pierwsza z nich podaje &lt;br&gt; samo rozwi&#x105;zanie. Druga rysuje drzewko dla rozwi&#x105;zania&lt;br&gt; Trzecia przedstawia rozwi&#x105;zanie krok po kroku.&lt;br&gt; Ko&#x17c;ystanie z programu rozpocznij &lt;br&gt; od wyboru trybu i podania danych wej&#x15b;ciowych. &lt;br&gt; Dane wej&#x15b;ciowe mo&#x17c;esz wpisa&#x107; r&#x119;cznie &lt;br&gt;lub wczyta&#x107; z pliku.&lt;/html&gt;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="jComboBox1">
