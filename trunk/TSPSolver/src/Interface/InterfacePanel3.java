@@ -258,9 +258,9 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         m1 = Integer.parseInt(jTextField2.getText());
         m2 = Integer.parseInt(jTextField3.getText());
         k = Integer.parseInt(jTextField4.getText());
-        if (spr_miasta(m2, m1))
+        if (spr_miasta(m1, m2))
         {
-            koszty[m2-1][m1-1] = k;
+            koszty[m1-1][m2-1] = k;
             jTextField2.setText("");
             jTextField3.setText("");
             jTextField4.setText("");
@@ -334,12 +334,12 @@ private JPanel wypiszKoszty(int ilosc, Integer[][] koszty)
                 }
                 else if ((i!=0)&&(j!=0))
                 {
-                    if((i!=j)&&(koszty[i-1][j-1]<100000))
+                    if((i!=j)&&(koszty[j-1][i-1]<100000))
                     {
-                        if (koszty[i-1][j-1]<0)
+                        if (koszty[j-1][i-1]<0)
                             NewColumn.add(new javax.swing.JLabel(" "));
                         else
-                            NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                            NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[j-1][i-1])));
                     }
                     else
                         NewColumn.add(new javax.swing.JLabel(Character.toString((char)8734)));

@@ -140,7 +140,7 @@ public class InterfacePanel2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        InterfacePanel3 Panel3 = new InterfacePanel3(jComboBox1.getSelectedIndex());
+        InterfacePanel3 Panel3 = new InterfacePanel3(jComboBox1.getSelectedIndex()+1);
 //        this.setVisible(false);
         Panel3.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
