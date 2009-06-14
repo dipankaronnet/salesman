@@ -203,12 +203,12 @@ public class InterfacePanel6 extends javax.swing.JFrame
                     }
                     else if ((i!=0)&&(j!=0))
                     {
-                        if((i!=j)&&(koszty[i-1][j-1]<INF))
+                        if((i!=j)&&(koszty[j-1][i-1]<INF))
                         {
-                            if (koszty[i-1][j-1]<0)
+                            if (koszty[j-1][i-1]<0)
                                 NewColumn.add(new javax.swing.JLabel(" "));
                             else
-                                NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
+                                NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[j-1][i-1])));
                         }
                         else
                             NewColumn.add(new javax.swing.JLabel(Character.toString((char)8734)));
