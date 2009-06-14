@@ -203,7 +203,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
                     }
                     else if ((i!=0)&&(j!=0))
                     {
-                        if((i!=j)&&(koszty[j-1][i-1]<INF))
+                        if((koszty[j-1][i-1]<INF))
                         {
                             if (koszty[j-1][i-1]<0)
                                 NewColumn.add(new javax.swing.JLabel(" "));
@@ -211,7 +211,10 @@ public class InterfacePanel6 extends javax.swing.JFrame
                                 NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[j-1][i-1])));
                         }
                         else
+                        {
+                            if( (koszty[j-1][i-1]==INF)) // D
                             NewColumn.add(new javax.swing.JLabel(Character.toString((char)8734)));
+                        }
                         NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                     }
                     else
