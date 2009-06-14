@@ -10,11 +10,6 @@ import GrafVisualization.Vertex;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-/*import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;*/
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,7 +63,6 @@ public class InterfacePanel6 extends javax.swing.JFrame
     public InterfacePanel6(int t, int i, Integer[][] k) throws IOException
     {
         initComponents();
-
         tryb = t;
         ilosc = i;
         koszty = new Integer[ilosc][];
@@ -81,11 +75,15 @@ public class InterfacePanel6 extends javax.swing.JFrame
                 koszty[j][l] = k[j][l];
         rozw = new Solver(ilosc,koszty);
         iteracje = rozw.branchAndBound()+1;
-       // rozw.completePath(); //D
+        // rozw.completePath(); //D
 		wypis1=rozw.printAnswer2(); //D
 		wypis2=rozw.printAnswer3(); //D
+//<<<<<<< .mine
+		//saveCosts();				//D
+//=======
 	//	saveCosts();				//D
        lb=rozw.answer.getLowerBound();
+//>>>>>>> .r56
         ustawParametry();
 
         wypiszWynik();
@@ -100,7 +98,11 @@ public class InterfacePanel6 extends javax.swing.JFrame
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 ktoraIteracja++;
+//<<<<<<< .mine
+				//rozw.branchAndBound2(ktoraIteracja); // D
+//=======
 				rozw.branchAndBound2(ktoraIteracja,iteracje); // D
+//>>>>>>> .r56
                 calyPanel.remove(2);
                 calyPanel.add(new JScrollPane(nowyPrawyPanel()));
                 calyPanel.repaint();
@@ -114,7 +116,11 @@ public class InterfacePanel6 extends javax.swing.JFrame
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 ktoraIteracja--;
+//<<<<<<< .mine
+				//rozw.branchAndBound2(ktoraIteracja); // D
+//=======
 				 rozw.branchAndBound2(ktoraIteracja,iteracje); // D
+//>>>>>>> .r56
                 calyPanel.remove(2);
                 calyPanel.add(new JScrollPane(nowyPrawyPanel()));
                 calyPanel.repaint();
@@ -205,7 +211,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
                                 NewColumn.add(new javax.swing.JLabel(String.valueOf(koszty[i-1][j-1])));
                         }
                         else
-                            NewColumn.add(new javax.swing.JLabel("oo"));
+                            NewColumn.add(new javax.swing.JLabel(Character.toString((char)8734)));
                         NewColumn.add(Box.createRigidArea(new Dimension(10,0)));
                     }
                     else
@@ -322,44 +328,10 @@ public class InterfacePanel6 extends javax.swing.JFrame
 
     }
 
-    /*Tworzy i zwraca panel z wszystkimi tabelkami, które są aktualnie do wypisania
-     */
-   /* private JPanel wypiszTabelki()
-    {
-        JPanel tmpPanel = new javax.swing.JPanel();//Panel z wszystkimi tabelkami, który zostanie zwrócony
-        tmpPanel.setLayout(new GridLayout(0,3,5,5));
-        tmpPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-        /******Fragmenty kodu Doroty****/
-      /*  Stack <Vertex>stos=new Stack<Vertex>();//Stos, na który będą wrzucane kolejne wierzchołki
-        Collection<Vertex> children = new ArrayList<Vertex>();//lista "dzieci" danego wierzchołka
-        Vertex root = rozw.treeVisualization.findRoot();//pierwszy wierzch.
-        stos.push(root);
-        int tableIndex = 1; // nr aktualnie wypisywanej tabelki
-        while(!stos.isEmpty())
-        {
-            root = stos.pop();
-            JPanel tabPanel = new javax.swing.JPanel();//Osobny panel dla każdej tabelki
-            tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.PAGE_AXIS));
-            tabPanel.add(new javax.swing.JLabel("Wierzchołek nr "+Integer.toString(root.getId())));
-            tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
-            tabPanel.add(wypiszKoszty(root.getDistancesSize(), root.getDistances()));
-            tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
-            tmpPanel.add(tabPanel);
-            tableIndex++;
-            children=rozw.treeVisualization.gv.getSuccessors(root);//wrzucenie na stos "dzieci" węzła
-            for(Iterator<Vertex>it = children.iterator();it.hasNext();)
-            {
-                Vertex naStos=it.next();
-                stos.push(naStos);
-            }
-
-        }
-        return tmpPanel;
-    }*/
-	//D całe wypisz tabelki zmieniłam. Ty chyba tu nic nie robiłaś
+    /*zwraca Panel ze wszystkimi tabelkami*/
 	private JPanel wypiszTabelki()
 {
-    JPanel tmpPanel = new javax.swing.JPanel();//Panel z wszystkimi tabelkami, który zostanie zwrócony
+    JPanel tmpPanel = new javax.swing.JPanel();
     tmpPanel.setLayout(new GridLayout(0,3,5,5));
     tmpPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
     /******Fragmenty kodu Doroty****/
@@ -374,6 +346,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
         JPanel tabPanel = new javax.swing.JPanel();//Osobny panel dla każdej tabelki
         tabPanel.setLayout(new BoxLayout(tabPanel, BoxLayout.PAGE_AXIS));
         tabPanel.add(new javax.swing.JLabel("Wierzchołek nr "+Integer.toString(root.getId())));
+        tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
         tabPanel.add(new javax.swing.JLabel("LB =  "+Integer.toString(root.getLowerBound())));
         tabPanel.add(Box.createRigidArea(new Dimension(0,10)));
         tabPanel.add(wypiszKoszty(root.getDistancesSize(), root.getDistances()));
@@ -417,7 +390,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
     /** Tworzy nowy prawy panel dla trybu trzeciego*/
     private JPanel nowyPrawyPanel()
     {
-
+ //       iteracje = rozw.branchAndBound();
         JPanel tmpPanel = new javax.swing.JPanel();
         tmpPanel.setLayout(new BoxLayout(tmpPanel, BoxLayout.PAGE_AXIS));
         JPanel przyciski = new javax.swing.JPanel();
