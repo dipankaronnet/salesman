@@ -104,6 +104,7 @@ public class Solver {
             size=root.getSize();
             while(size>2)  // 1 iteracja algo do moemntu gdy redukowana macierz ma rozmiar 2
             {
+
                 ++ileKrokow;
                 root.setLowerBoundAndReduce(root.getLowerBound()); // redukcja i obliczenie lb
                 root.setEdgeToBranch(); // wyznaczenie luku wzgledem ktorego dzielimy

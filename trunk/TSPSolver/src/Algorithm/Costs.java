@@ -234,10 +234,14 @@ public class Costs {
             Edge e=it.next();
             if(prev!=e.getFrom())
             {
+                //dodany if
+                if(distances[stop.getTo()][start.getFrom()]!=-1)
+                {
                 distances[stop.getTo()][start.getFrom()]=INF; //blokuje wszystkie spójne częsci poza ostatnią
                 start=e;
                 stop=e;
                 prev=start.getTo();
+                }
             }
             else
             {
@@ -246,6 +250,8 @@ public class Costs {
             }
             
         }
+        //dodany if zeby nie robilo niesk w miejscu ktorego nie ma
+        if(distances[stop.getTo()][start.getFrom()]!=-1)
             distances[stop.getTo()][start.getFrom()]=INF;
     // zawsze ostatnia pętla zostaje do zablokowania jeżeli path spójny to całość jeżeli nie
     // to ostatnia część

@@ -260,11 +260,15 @@ public class InterfacePanel3 extends javax.swing.JFrame {
         k = Integer.parseInt(jTextField4.getText());
         if (spr_miasta(m1, m2))
         {
-            koszty[m1-1][m2-1] = k;
+            if(m1!=m2)
+                koszty[m1-1][m2-1] = k;
+            if(m1==m2 && m1>0 )
+                koszty[m1-1][m2-1]= 100000000;
             jTextField2.setText("");
             jTextField3.setText("");
             jTextField4.setText("");
         }
+
 
         else
         {
@@ -279,6 +283,8 @@ public class InterfacePanel3 extends javax.swing.JFrame {
  */
     private void DalejActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DalejActionPerformed
     try {
+            for(int i=0; i<ilosc; ++i)
+                koszty[i][i]=100000000;
             InterfacePanel6 Panel6 = new InterfacePanel6(tryb, ilosc, koszty);
             Panel6.setVisible(true);
         }
