@@ -46,6 +46,7 @@ public class InterfacePanel2 extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Wybór trybu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 1, 15))); // NOI18N
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 350));
 
         jButton1.setText("Wpisz");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -68,7 +69,7 @@ public class InterfacePanel2 extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("<html>Rozwiązanie problemu komiwojeżera można <br>\nobejrzeć w trzech wersjach. Pierwsza z nich podaje <br>\nsamo rozwiązanie. Druga rysuje drzewko dla rozwiązania<br>\nTrzecia przedstawia rozwiązanie krok po kroku.<br>\nKożystanie z programu rozpocznij <br>\nod wyboru trybu i podania danych wejściowych. <br>\nDane wejściowe możesz wpisać ręcznie lub wczytać z pliku.</html>");
+        jLabel1.setText("<html>Rozwiązanie problemu komiwojeżera można <br> obejrzeć w trzech wersjach. Pierwsza z nich podaje <br> samo rozwiązanie. Druga rysuje drzewko dla rozwiązania<br> Trzecia przedstawia rozwiązanie krok po kroku.<br> Kożystanie z programu rozpocznij <br> od wyboru trybu i podania danych wejściowych. <br> Dane wejściowe możesz wpisać ręcznie <br>lub wczytać z pliku.</html>");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tryb 1", "Tryb 2", "Tryb 3" }));
 
@@ -81,20 +82,18 @@ public class InterfacePanel2 extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(27, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
                         .addComponent(jButton2)
-                        .addGap(123, 123, 123))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(332, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(311, Short.MAX_VALUE))
+                        .addGap(123, 123, 123))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(311, Short.MAX_VALUE))))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButton3});
@@ -121,14 +120,14 @@ public class InterfacePanel2 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

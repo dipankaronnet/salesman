@@ -140,7 +140,7 @@ public class InterfacePanel6 extends javax.swing.JFrame
         else
         {
             calyPanel.setLayout(new BoxLayout(calyPanel, BoxLayout.LINE_AXIS));
-            wymiary = new Dimension(1200, 1000);
+            wymiary = new Dimension(1180, 800);
         }
         this.setPreferredSize(wymiary);
        // this.setName("Rozwiązanie");
